@@ -1,0 +1,34 @@
+{
+    "name": "parse-dont-validate",
+    "description": "Verify the integrity of the data and return it in expected shape, otherwise throw error or return a specified default value",
+    "version": "0.0.0",
+    "main": "build/index.js",
+    "license": "MIT",
+    "types": "build",
+    "scripts": {
+        "build": "rm -rf build && tsc",
+        "test": "jest",
+        "code-cov": "jest --coverage --coverageDirectory='coverage'"
+    },
+    "bugs": "https://github.com/P-YNPM/parse-dont-validate/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/P-YNPM/parse-dont-validate"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.15.8",
+        "@babel/preset-typescript": "^7.15.0",
+        "@types/jest": "^27.0.2",
+        "@types/node": "^16.11.10",
+        "jest": "^27.3.1",
+        "ts-jest": "^27.0.7",
+        "typescript": "^4.4.4"
+    },
+    "keywords": [
+        "parse",
+        "parse variable",
+        "validate",
+        "don't validate",
+        "parse, don't validate"
+    ]
+}

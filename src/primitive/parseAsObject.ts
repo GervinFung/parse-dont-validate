@@ -1,0 +1,14 @@
+import { Parse, Options, createOptions } from './parseAsType';
+
+/**
+ *
+ * @param variableValue value of a variable to be validated and parse
+ * @returns Options<object>. Option functions to be called that either would return a specified value or throw error in case variable is not of object type
+ */
+const parseAsObject: Parse<object> = (variableValue): Options<object> => {
+    const expectedType = 'object';
+    const receivedType = typeof variableValue;
+    return createOptions(variableValue, expectedType, receivedType);
+};
+
+export default parseAsObject;
