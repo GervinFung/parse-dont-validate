@@ -1778,11 +1778,6 @@ eslint-visitor-keys@^3.0.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-3.1.0.tgz#eee4acea891814cda67a7d8812d9647dd0179af2"
   integrity sha512-yWJFpu4DtjsWKkt5GeNBBuZMlNcYVs6vRCLoCVEJrTjaSB6LC98gFipNK/erM2Heg/E8mIK+hXG/pJMLK+eRZA==
 
-esm@^3.2.25:
-  version "3.2.25"
-  resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"
-  integrity sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
-
 esprima@^4.0.0, esprima@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
@@ -2863,6 +2858,11 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
+parse-dont-validate@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/parse-dont-validate/-/parse-dont-validate-0.0.2.tgz#41ed0f5baf436a8e716ec5e99ae474c644e26e37"
+  integrity sha512-THQOFzrZGUsGlGS/+KnCO41TsqjYs3wBSK6maPQMcHINbrcyGNgOdKJCzJyjL9HvTlQciwJshj7vuKGw8Srv+w==
+
 parse5@6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz#e1a1c085c569b3dc08321184f19a39cc27f7c30b"
@@ -3276,13 +3276,13 @@ tr46@^2.1.0:
   dependencies:
     punycode "^2.1.1"
 
-ts-add-js-extension@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/ts-add-js-extension/-/ts-add-js-extension-0.0.3.tgz#5f1c9b1584a5cd74f0d9b0c93a14473573bd6350"
-  integrity sha512-S19TSfrL2wPmaermIbLYSLeNxE89ZnioOxHB0DaxGBFIflmOpRVVOhTjBi0AXFiy5qmcSgf2VXLPdpcJUwTycQ==
+ts-add-js-extension@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/ts-add-js-extension/-/ts-add-js-extension-0.0.5.tgz#605df1b41b68ad9774f72df7efd17588b3bd206e"
+  integrity sha512-oCCs5mBGQo9sHlZb2ahHllZtAHVVTO6EJi39M29WskoSr7dz0oiGNUYN28nV2C3ViTqk8CBLorFrfUe4MfMxGw==
   dependencies:
     "@typescript-eslint/typescript-estree" "^5.4.0"
-    esm "^3.2.25"
+    parse-dont-validate "^0.0.2"
     yargs "^17.3.0"
 
 ts-jest@^27.0.7:
