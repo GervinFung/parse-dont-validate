@@ -53,7 +53,7 @@ Thus I wrote this package to solve my own problem :)
 
 ### typescript
 ```ts
-import { parseAsString } from 'parse-dont-validate/build'
+import { parseAsString } from 'parse-dont-validate'
 
 const name: unknown = '123' //assume we don't know it's string
 
@@ -65,7 +65,7 @@ const parsed = parseAsString(name).orElseThrow('name')
 
 ### javascript
 ```ts
-import { parseAsString } from 'parse-dont-validate/build'
+import { parseAsString } from 'parse-dont-validate'
 
 const name = '123' //assume we don't know it's string
 
