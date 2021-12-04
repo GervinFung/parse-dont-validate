@@ -5,6 +5,7 @@
     "main": "./build/index.js",
     "license": "MIT",
     "type": "module",
+    "types": "./build",
     "scripts": {
         "build": "rm -rf build && tsc && yarn add-js-extension",
         "build-prod": "rm -rf build && tsc && yarn add-js-extension-pro",
