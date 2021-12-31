@@ -1,4 +1,4 @@
-import { Parse, Options, createOptions } from './parseAsType';
+import { Parse, Options, createOptionsForPrimitive } from '../parseAsType';
 
 /**
  *
@@ -8,7 +8,7 @@ import { Parse, Options, createOptions } from './parseAsType';
 const parseAsFunction: Parse<Function> = (variableValue): Options<Function> => {
     const expectedType = 'function';
     const receivedType = typeof variableValue;
-    return createOptions(variableValue, expectedType, receivedType);
+    return createOptionsForPrimitive(variableValue, expectedType, receivedType);
 };
 
 export default parseAsFunction;

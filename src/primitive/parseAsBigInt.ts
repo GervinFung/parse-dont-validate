@@ -1,4 +1,4 @@
-import { Parse, Options, createOptions } from './parseAsType';
+import { Parse, Options, createOptionsForPrimitive } from '../parseAsType';
 
 /**
  *
@@ -8,7 +8,7 @@ import { Parse, Options, createOptions } from './parseAsType';
 const parseAsBigInt: Parse<bigint> = (variableValue): Options<bigint> => {
     const expectedType = 'bigint';
     const receivedType = typeof variableValue;
-    return createOptions(variableValue, expectedType, receivedType);
+    return createOptionsForPrimitive(variableValue, expectedType, receivedType);
 };
 
 export default parseAsBigInt;

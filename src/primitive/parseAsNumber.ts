@@ -1,4 +1,4 @@
-import { Options, createOptions } from './parseAsType';
+import { Options, createOptionsForPrimitive } from '../parseAsType';
 
 type NumberType =
     | 'PositiveInteger'
@@ -64,7 +64,7 @@ const parseAsNumber: ParseNumber = (
     const receivedType = expectedNumberType
         ? findNumberType(variableValue)
         : typeof variableValue;
-    return createOptions(variableValue, expectedType, receivedType);
+    return createOptionsForPrimitive(variableValue, expectedType, receivedType);
 };
 
 export default parseAsNumber;

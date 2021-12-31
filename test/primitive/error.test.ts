@@ -1,19 +1,21 @@
-import { createOptions } from '../../src/primitive/parseAsType';
+import { createOptionsForPrimitive } from '../../src/parseAsType';
 
-describe('Test createOptions throw error', () => {
+describe('Test createOptionsForPrimitive throw error', () => {
     test('throw error is type does not match', () => {
         expect(() =>
-            createOptions(123, 'number', 'boolean').orElseThrowError(
-                'variableName'
-            )
+            createOptionsForPrimitive(
+                123,
+                'number',
+                'boolean'
+            ).orElseThrowError('variableName')
         ).toThrowError();
     });
 });
 
-describe('Test createOptions return parsed variable', () => {
+describe('Test createOptionsForPrimitive return parsed variable', () => {
     test('throw error is type does not match', () => {
         expect(
-            createOptions(123, 'number', 'number').orElseThrowError(
+            createOptionsForPrimitive(123, 'number', 'number').orElseThrowError(
                 'variableName'
             )
         ).toEqual(123);

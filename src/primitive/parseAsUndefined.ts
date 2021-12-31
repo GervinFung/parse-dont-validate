@@ -1,4 +1,4 @@
-import { Parse, Options, createOptions } from './parseAsType';
+import { Parse, Options, createOptionsForPrimitive } from '../parseAsType';
 
 /**
  *
@@ -10,7 +10,7 @@ const parseAsUndefined: Parse<undefined> = (
 ): Options<undefined> => {
     const expectedType = 'undefined';
     const receivedType = typeof variableValue;
-    return createOptions(variableValue, expectedType, receivedType);
+    return createOptionsForPrimitive(variableValue, expectedType, receivedType);
 };
 
 export default parseAsUndefined;

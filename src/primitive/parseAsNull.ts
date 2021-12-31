@@ -1,4 +1,4 @@
-import { Parse, Options, createOptions } from './parseAsType';
+import { Parse, Options, createOptionsForPrimitive } from '../parseAsType';
 
 /**
  *
@@ -8,7 +8,7 @@ import { Parse, Options, createOptions } from './parseAsType';
 const parseAsNull: Parse<null> = (variableValue): Options<null> => {
     const expectedType = 'null';
     const receivedType = variableValue === null ? 'null' : typeof variableValue;
-    return createOptions(variableValue, expectedType, receivedType);
+    return createOptionsForPrimitive(variableValue, expectedType, receivedType);
 };
 
 export default parseAsNull;
