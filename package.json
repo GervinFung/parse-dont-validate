@@ -1,7 +1,7 @@
 {
     "name": "parse-dont-validate",
     "description": "Verify the integrity of the data and return it in expected shape, otherwise throw error or return a specified default value",
-    "version": "0.0.3",
+    "version": "1.0.0",
     "main": "./build/index.js",
     "license": "MIT",
     "type": "module",

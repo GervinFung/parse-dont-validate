@@ -22,6 +22,7 @@ readonly probably won't work in JavaScript, which is why mutable version was cre
 ## **_Question_**
 
 `Why do I build this?`
+
 I faced an issue of verifying the shape of the data I needed by calling 3rd party API, although I managed to do it, my intern supervisor (Wong Jia Hau) told me that was a very bad design (See example below)
 ```ts
 type Human = {
@@ -46,6 +47,7 @@ const parse = (name: unknown) => {
 Thus I wrote this package to solve my own problem :)
 
 `What are the functionalities?`
+
 In general, once a parsing function is called, it returns an Options object that contains the following functions
 1. `orElseGet(alternative value)`
 2. `orElseGetUndefined()`
@@ -56,14 +58,13 @@ In general, once a parsing function is called, it returns an Options object that
 For data structure such as map, array, set and object, the second parameter will be a callback function which you write your parsing for each element in the array. See the code below
 ```ts
 const parseArray = parseAsReadonlyArray(
-    [1, 2, 3, 4, 5], (value: parseAsNumber(value).orElseThrowDefault('value')
+    [1, 2, 3, 4, 5], (value => parseAsNumber(value).orElseThrowDefault('value')
 ).orElseGetReadonlyEmptyArray();
 ```
 **Note**:
 For more specific function for each different type, please refer to the code
 
 `How do I use it?`
-### typescript/javascript
 ```ts
 import { parseAsString } from 'parse-dont-validate'
 
@@ -81,15 +82,21 @@ const parsed = parseAsString(name).orElseThrowCustom('this is custom error messa
 ```
 
 `Can I raise an issue?`
+
 Feel free to raise an issue if you have a question, an enhancement, or a bug report.
 
 `How can I contribute?`
+
+I appreciate that you are even reading this, I am indeed flattered, even more so if you are willing to contribute
 I'd like to have a few words about contributing.
 
     Use TypeScript
     Write Test Code
 
 ## **_How to use_**
+
 `yarn add parse-dont-validate`
+
 OR
+
 `npm i parse-dont-validate`
