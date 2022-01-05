@@ -3,37 +3,43 @@ import parseAsBoolean from '../../src/primitive/parseAsBoolean';
 describe('Test parse as boolean positive case', () => {
     test.each([
         {
-            variableValue: true,
-        },
+            value: true,
+        } as const,
         {
-            variableValue: false,
-        },
-    ])('data => %p', ({ variableValue }) => {
-        expect(parseAsBoolean(variableValue).orElse(undefined)).toEqual(
-            variableValue
-        );
+            value: false,
+        } as const,
+    ])('data => %p', ({ value }) => {
+        const parseBoolean = parseAsBoolean(value);
+        expect(parseBoolean.orElseGetTrue()).toEqual(value);
+        expect(parseBoolean.orElseGetFalse()).toEqual(value);
+
+        const exactly = parseBoolean.exactlyAs(value);
+        expect(exactly.orElseGetFalse()).toEqual(value);
+        expect(exactly.orElseGetTrue()).toEqual(value);
     });
 });
 
 describe('Test parse as boolean negative case, return specified output if not boolean', () => {
     test.each([
         {
-            variableValue: {
+            value: {
                 t: true,
             },
-            variableElse: undefined,
         },
         {
-            variableValue: [
+            value: [
                 {
                     t: true,
                 },
             ],
-            variableElse: '',
         },
-    ])('data => %p', ({ variableValue, variableElse }) => {
-        expect(parseAsBoolean(variableValue).orElse(variableElse)).toEqual(
-            variableElse
-        );
+    ])('data => %p', ({ value }) => {
+        const parseBoolean = parseAsBoolean(value);
+        expect(parseBoolean.orElseGetTrue()).toEqual(true);
+        expect(parseBoolean.orElseGetFalse()).toEqual(false);
+
+        const exactly = parseBoolean.exactlyAs(true);
+        expect(exactly.orElseGetFalse()).toEqual(false);
+        expect(exactly.orElseGetTrue()).toEqual(true);
     });
 });

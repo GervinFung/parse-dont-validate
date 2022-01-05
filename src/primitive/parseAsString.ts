@@ -1,14 +1,43 @@
-import { Parse, Options, createOptionsForPrimitive } from '../parseAsType';
+import {
+    Options,
+    createOptionsForPrimitive,
+    createExact,
+    typeOfEqual,
+} from '../util';
 
-/**
- *
- * @param variableValue value of a variable to be validated and parse
- * @returns Options<string>. Option functions to be called that either would return a specified value or throw error in case variable is not of string type
- */
-const parseAsString: Parse<string> = (variableValue): Options<string> => {
+type StringOptions<T extends string> = Options<T> & {
+    orElseGetEmptyString: () => '' | T;
+};
+
+const parseAsString = (
+    value: unknown
+): StringOptions<string> & {
+    /**
+     * @exact the exact value you expect the parsed value to be
+     *
+     * ```ts
+     * Example:
+     * const name: unknown = 'name'
+     * const str = parseAsString(name).exactlyAs('name').orElseGetUndefined()
+     * // the type of str in this case would be "'name' | undefined" instead of "string | undefined"
+     * ```
+     *
+     * @returns the StringOptions objects
+     * **/
+    exactlyAs: <T extends string>(t: T) => StringOptions<T>;
+} => {
     const expectedType = 'string';
-    const receivedType = typeof variableValue;
-    return createOptionsForPrimitive(variableValue, expectedType, receivedType);
+    const receivedType = typeof value;
+    return {
+        ...createOptionsForPrimitive(value, expectedType, receivedType),
+        orElseGetEmptyString: () =>
+            typeOfEqual(expectedType, receivedType) ? (value as string) : '',
+        exactlyAs: (t) => ({
+            ...createExact(value, expectedType, receivedType, t),
+            orElseGetEmptyString: () =>
+                typeOfEqual(expectedType, receivedType) ? t : '',
+        }),
+    };
 };
 
 export default parseAsString;

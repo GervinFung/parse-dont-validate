@@ -3,30 +3,26 @@ import parseAsNull from '../../src/primitive/parseAsNull';
 describe('Test parse as undefined positive case', () => {
     test.each([
         {
-            variableValue: null,
+            value: null,
         },
-    ])('data => %p', ({ variableValue }) => {
-        expect(parseAsNull(variableValue).orElse(undefined)).toEqual(
-            variableValue
-        );
-    });
+    ])('data => %p', ({ value }) =>
+        expect(parseAsNull(value).orElseGetUndefined()).toEqual(value)
+    );
 });
 
 describe('Test parse as null negative case, return specified output if not boolean', () => {
     test.each([
         {
-            variableValue: {
+            value: {
                 t: null,
             },
-            variableElse: true,
+            alternative: true,
         },
         {
-            variableValue: undefined,
-            variableElse: '',
+            value: undefined,
+            alternative: '',
         },
-    ])('data => %p', ({ variableValue, variableElse }) => {
-        expect(parseAsNull(variableValue).orElse(variableElse)).toEqual(
-            variableElse
-        );
-    });
+    ])('data => %p', ({ value, alternative }) =>
+        expect(parseAsNull(value).orElseGet(alternative)).toEqual(alternative)
+    );
 });

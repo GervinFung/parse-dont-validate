@@ -3,32 +3,28 @@ import parseAsSymbol from '../../src/primitive/parseAsSymbol';
 describe('Test parse as symbol positive case', () => {
     test.each([
         {
-            variableValue: Symbol(123123123),
+            value: Symbol(123123123),
         },
         {
-            variableValue: Symbol('123123123'),
+            value: Symbol('123123123'),
         },
-    ])('data => %p', ({ variableValue }) => {
-        expect(parseAsSymbol(variableValue).orElse(undefined)).toEqual(
-            variableValue
-        );
-    });
+    ])('data => %p', ({ value }) =>
+        expect(parseAsSymbol(value).orElseGetUndefined()).toEqual(value)
+    );
 });
 
 describe('Test parse as object negative case', () => {
     test.each([
         {
-            variableValue: '[1, 2, 3, 4, 5, 6]',
+            value: '[1, 2, 3, 4, 5, 6]',
         },
         {
-            variableValue: Symbol(123123123).description,
+            value: Symbol(123123123).description,
         },
         {
-            variableValue: true,
+            value: true,
         },
-    ])('data => %p', ({ variableValue }) => {
-        expect(parseAsSymbol(variableValue).orElse(undefined)).toEqual(
-            undefined
-        );
-    });
+    ])('data => %p', ({ value }) =>
+        expect(parseAsSymbol(value).orElseGetUndefined()).toEqual(undefined)
+    );
 });

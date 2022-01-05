@@ -1,33 +1,35 @@
 import parseAsString from '../../src/primitive/parseAsString';
 
-describe('Test parse as string positive case', () => {
+describe('Test parse as string get empty string', () => {
     test.each([
         {
-            variableValue: 'Who am I',
-        },
+            value: 123,
+        } as const,
         {
-            variableValue: 'Youtube',
-        },
-    ])('data => %p', ({ variableValue }) => {
-        expect(parseAsString(variableValue).orElse(undefined)).toEqual(
-            variableValue
-        );
+            value: true,
+        } as const,
+    ])('data => %p', ({ value }) => {
+        const parseString = parseAsString(value);
+        expect(parseString.orElseGetEmptyString()).toEqual('');
+
+        const exact = parseString.exactlyAs('12');
+        expect(exact.orElseGetEmptyString()).toEqual('');
     });
 });
 
-describe('Test parse as string negative case, return specified output if not string', () => {
+describe('Test parse as string get empty string', () => {
     test.each([
         {
-            variableValue: 123,
-            variableElse: undefined,
-        },
+            value: '123',
+        } as const,
         {
-            variableValue: true,
-            variableElse: '',
-        },
-    ])('data => %p', ({ variableValue, variableElse }) => {
-        expect(parseAsString(variableValue).orElse(variableElse)).toEqual(
-            variableElse
-        );
+            value: 'Yep',
+        } as const,
+    ])('data => %p', ({ value }) => {
+        const parseString = parseAsString(value);
+        expect(parseString.orElseGetEmptyString()).toEqual(value);
+
+        const exact = parseString.exactlyAs(value);
+        expect(exact.orElseGetEmptyString()).toEqual(value);
     });
 });

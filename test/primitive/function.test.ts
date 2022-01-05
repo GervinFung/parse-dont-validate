@@ -3,34 +3,30 @@ import parseAsFunction from '../../src/primitive/parseAsFunction';
 describe('Test parse as function positive case', () => {
     test.each([
         {
-            variableValue: () => 1 + 1,
+            value: () => 1 + 1,
         },
         {
-            variableValue: () => undefined,
+            value: () => undefined,
         },
         {
-            variableValue: function () {},
+            value: function () {},
         },
-    ])('data => %p', ({ variableValue }) => {
-        expect(parseAsFunction(variableValue).orElse(undefined)).toEqual(
-            variableValue
-        );
-    });
+    ])('data => %p', ({ value }) =>
+        expect(parseAsFunction(value).orElseGetUndefined()).toEqual(value)
+    );
 });
 
 describe('Test parse as boolean negative case, return specified output if not boolean', () => {
     test.each([
         {
-            variableValue: {
-                test: () => {
-                    return 'test';
-                },
+            value: {
+                test: () => 'test',
             },
-            variableElse: '',
+            alternative: '',
         },
-    ])('data => %p', ({ variableValue, variableElse }) => {
-        expect(parseAsFunction(variableValue).orElse(variableElse)).toEqual(
-            variableElse
-        );
-    });
+    ])('data => %p', ({ value, alternative }) =>
+        expect(parseAsFunction(value).orElseGet(alternative)).toEqual(
+            alternative
+        )
+    );
 });

@@ -1,14 +1,6 @@
-import { Parse, Options, createOptionsForPrimitive } from '../parseAsType';
+import { Options, createOptionsForPrimitive } from '../util';
 
-/**
- *
- * @param variableValue value of a variable to be validated and parse
- * @returns Options<Function>. Option functions to be called that either would return a specified value or throw error in case variable is not of Function type
- */
-const parseAsFunction: Parse<Function> = (variableValue): Options<Function> => {
-    const expectedType = 'function';
-    const receivedType = typeof variableValue;
-    return createOptionsForPrimitive(variableValue, expectedType, receivedType);
-};
+const parseAsFunction = (value: unknown): Options<Function> =>
+    createOptionsForPrimitive(value, 'function', typeof value);
 
 export default parseAsFunction;

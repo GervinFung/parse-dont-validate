@@ -8,9 +8,9 @@
     "types": "./build",
     "scripts": {
         "build": "rm -rf build && tsc && yarn add-js-extension",
-        "build-prod": "rm -rf build && tsc && yarn add-js-extension-pro",
+        "build-prod": "rm -rf build && tsc && yarn add-js-extension-prod",
         "test": "jest",
-        "add-js-extension-prod": "ts-add-js-extension add --dir=build --keepComments=true --minify true",
+        "add-js-extension-prod": "ts-add-js-extension add --dir=build --keepComments=true --minify=true",
         "add-js-extension": "ts-add-js-extension add --dir=build",
         "code-cov": "jest --coverage --coverageDirectory='coverage'"
     },
@@ -19,6 +19,9 @@
         "type": "git",
         "url": "https://github.com/P-YNPM/parse-dont-validate"
     },
+    "files": [
+        "build"
+    ],
     "devDependencies": {
         "@babel/preset-env": "^7.15.8",
         "@babel/preset-typescript": "^7.15.0",
