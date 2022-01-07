@@ -15,6 +15,7 @@ describe('Test createOptionsForPrimitive & creactExact positive case', () => {
             'string'
         );
         expect(parseString.orElseGet('no way')).toEqual(value);
+        expect(parseString.orElseLazyGet(() => 'no way')).toEqual(value);
         expect(parseString.orElseGetUndefined()).toEqual(value);
         expect(parseString.orElseGetNull()).toEqual(value);
         expect(parseString.orElseThrowDefault('value')).toEqual(value);
@@ -49,6 +50,9 @@ describe('Test createOptionsForPrimitive negative case', () => {
             typeof value
         );
         expect(parseBoolean.orElseGet(alternative)).toEqual(alternative);
+        expect(parseBoolean.orElseLazyGet(() => alternative)).toEqual(
+            alternative
+        );
         expect(parseBoolean.orElseGetUndefined()).toEqual(u);
         expect(parseBoolean.orElseGetNull()).toEqual(n);
         expect(() => parseBoolean.orElseThrowDefault('value')).toThrowError();

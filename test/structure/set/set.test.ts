@@ -15,15 +15,16 @@ describe('Test parse as desired number array', () => {
             true
         );
         expect(isSet(parseSet.orElseGet(1))).toEqual(true);
+        expect(isSet(parseSet.orElseGet(() => 2))).toEqual(true);
+        const set1 = parseSet.orElseGetNull() ?? new Set();
         expect(
-            Array.from(parseSet.orElseGetNull()).every(
-                (val) => typeof val === 'number'
-            )
+            set1.size !== 0 &&
+                Array.from(set1).every((val) => typeof val === 'number')
         ).toEqual(true);
+        const set2 = parseSet.orElseGetUndefined() ?? new Set();
         expect(
-            Array.from(parseSet.orElseGetUndefined()).every(
-                (val) => typeof val === 'number'
-            )
+            set2.size !== 0 &&
+                Array.from(set1).every((val) => typeof val === 'number')
         ).toEqual(true);
         expect(
             Array.from(parseSet.orElseThrowDefault('arr')).every(
@@ -63,17 +64,22 @@ describe('Test parse as desired object array', () => {
             true
         );
         expect(isSet(parseSet.orElseGet(1))).toEqual(true);
+        expect(isSet(parseSet.orElseGet(() => 2))).toEqual(true);
+        const set1 = parseSet.orElseGetNull() ?? new Set();
         expect(
-            Array.from(parseSet.orElseGetNull()).every(
-                ({ name, age }) =>
-                    typeof name === 'string' && typeof age === 'number'
-            )
+            set1.size !== 0 &&
+                Array.from(set1).every(
+                    ({ name, age }) =>
+                        typeof name === 'string' && typeof age === 'number'
+                )
         ).toEqual(true);
+        const set2 = parseSet.orElseGetUndefined() ?? new Set();
         expect(
-            Array.from(parseSet.orElseGetUndefined()).every(
-                ({ name, age }) =>
-                    typeof name === 'string' && typeof age === 'number'
-            )
+            set2.size !== 0 &&
+                Array.from(set1).every(
+                    ({ name, age }) =>
+                        typeof name === 'string' && typeof age === 'number'
+                )
         ).toEqual(true);
         expect(
             Array.from(parseSet.orElseThrowDefault('arr')).every(
@@ -100,6 +106,15 @@ describe('Test parse as desired set negative case', () => {
             true
         );
         expect(parseSet.orElseGet(1)).toEqual(1);
+        expect(
+            parseSet.orElseLazyGet(() => ({
+                itDefinitelyWorked: true,
+                loaded: true,
+            }))
+        ).toEqual({
+            itDefinitelyWorked: true,
+            loaded: true,
+        });
         expect(parseSet.orElseGetNull()).toEqual(null);
         expect(parseSet.orElseGetUndefined()).toEqual(undefined);
         expect(() => parseSet.orElseThrowDefault('arr')).toThrowError();

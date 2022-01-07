@@ -1,9 +1,5 @@
-import {
-    Options,
-    createOptionsForPrimitive,
-    createExact,
-    typeOfEqual,
-} from '../util';
+import { isEqual } from 'granula-string';
+import { Options, createOptionsForPrimitive, createExact } from '../util';
 
 type StringOptions<T extends string> = Options<T> & {
     orElseGetEmptyString: () => '' | T;
@@ -31,11 +27,11 @@ const parseAsString = (
     return {
         ...createOptionsForPrimitive(value, expectedType, receivedType),
         orElseGetEmptyString: () =>
-            typeOfEqual(expectedType, receivedType) ? (value as string) : '',
+            isEqual(expectedType, receivedType) ? (value as string) : '',
         exactlyAs: (t) => ({
             ...createExact(value, expectedType, receivedType, t),
             orElseGetEmptyString: () =>
-                typeOfEqual(expectedType, receivedType) ? t : '',
+                isEqual(expectedType, receivedType) ? t : '',
         }),
     };
 };

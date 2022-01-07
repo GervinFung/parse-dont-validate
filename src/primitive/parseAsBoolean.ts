@@ -1,9 +1,5 @@
-import {
-    Options,
-    createOptionsForPrimitive,
-    createExact,
-    typeOfEqual,
-} from '../util';
+import { isEqual } from 'granula-string';
+import { Options, createOptionsForPrimitive, createExact } from '../util';
 
 type BooleanOptions<T extends boolean> = Options<T> & {
     orElseGetTrue: () => T | true;
@@ -29,14 +25,13 @@ const parseAsBoolean = (
 } => ({
     ...createOptionsForPrimitive(value, 'boolean', typeof value),
     orElseGetTrue: () =>
-        typeOfEqual('boolean', typeof value) ? (value as boolean) : true,
+        isEqual('boolean', typeof value) ? (value as boolean) : true,
     orElseGetFalse: () =>
-        typeOfEqual('boolean', typeof value) ? (value as boolean) : false,
+        isEqual('boolean', typeof value) ? (value as boolean) : false,
     exactlyAs: (t) => ({
         ...createExact(value, 'boolean', typeof value, t),
-        orElseGetFalse: () =>
-            typeOfEqual('boolean', typeof value) ? t : false,
-        orElseGetTrue: () => (typeOfEqual('boolean', typeof value) ? t : true),
+        orElseGetFalse: () => (isEqual('boolean', typeof value) ? t : false),
+        orElseGetTrue: () => (isEqual('boolean', typeof value) ? t : true),
     }),
 });
 

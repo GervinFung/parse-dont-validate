@@ -1,11 +1,17 @@
+import { isEqual } from 'granula-string';
 import ParseError from './ParseError';
 
 export type Options<T> = {
     /**
-     * @param u the alternative value to return if the data type does not match and have failed to parse
+     * @param u the alternative value to return if the data type does not match and have failed to parse, precompute instead of lazily loaded
      * @returns the parsed value, otherwise the alternative value
      */
     orElseGet: <U>(u: U) => U | T;
+    /**
+     * @param callBackFunction that is lazily loaded and will be called when it's necessary
+     * @returns the parsed value, otherwise the alternative value
+     */
+    orElseLazyGet: <U>(callBackFunction: () => U) => U | T;
     /**
      * @returns the parsed value, otherwise the undefined
      * */
@@ -44,9 +50,6 @@ const orElseThrowOptional = <T>(
     throw error;
 };
 
-export const typeOfEqual = (expectedType: string, receivedType: string) =>
-    expectedType === receivedType;
-
 export const isExact = <T, M extends T>(m: M, u: unknown, parseAble: boolean) =>
     parseAble && (u as M) === m;
 
@@ -57,6 +60,8 @@ const createOptionsWithParseable = <T>(
     isParseable: boolean
 ): Options<T> => ({
     orElseGet: (u) => (isParseable ? (value as T) : u),
+    orElseLazyGet: (callBackFunction) =>
+        isParseable ? (value as T) : callBackFunction(),
     orElseGetUndefined: () => (isParseable ? (value as T) : undefined),
     orElseGetNull: () => (isParseable ? (value as T) : null),
     orElseThrowDefault: (name): T =>
@@ -83,7 +88,7 @@ export const createExact = <T, M extends T>(
         value,
         `${m}`,
         receivedType,
-        isExact(m, value, typeOfEqual(expectedType, receivedType))
+        isExact(m, value, isEqual(expectedType, receivedType))
     );
 
 export const createOptionsForPrimitive = <T>(
@@ -95,7 +100,7 @@ export const createOptionsForPrimitive = <T>(
         value,
         expectedType,
         receivedType,
-        typeOfEqual(expectedType, receivedType)
+        isEqual(expectedType, receivedType)
     );
 
 type MutableDataStructType = 'Map' | 'Array' | 'Set';
@@ -129,26 +134,42 @@ export const structTypeOfEqual = (
         immutable,
         type
     );
-    return typeOfEqual(expectedType, receivedType);
+    return isEqual(expectedType, receivedType);
 };
 
-export const createOptionsForStructure = <T>(
+export const freeze = <G>(g: G, freeze: boolean) =>
+    freeze && typeof g === 'object' ? Object.freeze(g) : g;
+
+export const createOptionsForStructure = <T extends object>(
     value: unknown,
     callBackFunction: () => T,
     immutable: boolean,
     type: MutableDataStructType
 ): Options<T> => ({
     orElseGet: (u) =>
-        structTypeOfEqual(value, immutable, type) ? callBackFunction() : u,
+        freeze(
+            structTypeOfEqual(value, immutable, type) ? (value as T) : u,
+            immutable
+        ),
+    orElseLazyGet: (callBackFunction) =>
+        freeze(
+            structTypeOfEqual(value, immutable, type)
+                ? (value as T)
+                : callBackFunction(),
+            immutable
+        ),
+
     orElseGetUndefined: () =>
         structTypeOfEqual(value, immutable, type)
-            ? callBackFunction()
+            ? freeze(callBackFunction(), immutable)
             : undefined,
     orElseGetNull: () =>
-        structTypeOfEqual(value, immutable, type) ? callBackFunction() : null,
+        structTypeOfEqual(value, immutable, type)
+            ? freeze(callBackFunction(), immutable)
+            : null,
     orElseThrowDefault: (name): T => {
         if (structTypeOfEqual(value, immutable, type)) {
-            return callBackFunction();
+            return freeze(callBackFunction(), immutable);
         }
         const { expectedType, receivedType } =
             getIterableExpectedAndReceivedType(value, immutable, type);
@@ -161,7 +182,7 @@ export const createOptionsForStructure = <T>(
     },
     orElseThrowCustom: (message: string): T => {
         if (structTypeOfEqual(value, immutable, type)) {
-            return callBackFunction();
+            return freeze(callBackFunction(), immutable);
         }
         throw ParseError.customizedMessage(message);
     },

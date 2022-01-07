@@ -21,6 +21,7 @@ describe('Test parse as number positive case', () => {
         expect(exactAs.orElseGetUndefined()).toEqual(value);
         expect(exactAs.orElseGetNull()).toEqual(value);
         expect(exactAs.orElseGet(-1)).toEqual(value);
+        expect(exactAs.orElseLazyGet(() => -1)).toEqual(value);
         expect(exactAs.orElseThrowDefault('value')).toEqual(value);
         expect(exactAs.orElseThrowCustom('value')).toEqual(value);
 
@@ -28,6 +29,7 @@ describe('Test parse as number positive case', () => {
         expect(inRange.orElseGetUndefined()).toEqual(value);
         expect(inRange.orElseGetNull()).toEqual(value);
         expect(inRange.orElseGet(-1)).toEqual(value);
+        expect(exactAs.orElseLazyGet(() => -1)).toEqual(value);
         expect(inRange.orElseThrowDefault('value')).toEqual(value);
         expect(inRange.orElseThrowCustom('value')).toEqual(value);
     });
@@ -55,6 +57,7 @@ describe('Test parse as number negative case, return specified output if not num
         expect(exactAs.orElseGetUndefined()).toEqual(u);
         expect(exactAs.orElseGetNull()).toEqual(n);
         expect(exactAs.orElseGet(v)).toEqual(v);
+        expect(exactAs.orElseLazyGet(() => v)).toEqual(v);
         expect(() => exactAs.orElseThrowDefault('value')).toThrowError();
         expect(() => exactAs.orElseThrowCustom('value')).toThrowError();
 
@@ -62,6 +65,7 @@ describe('Test parse as number negative case, return specified output if not num
         expect(inRange.orElseGetUndefined()).toEqual(u);
         expect(inRange.orElseGetNull()).toEqual(n);
         expect(inRange.orElseGet(v)).toEqual(v);
+        expect(inRange.orElseLazyGet(() => v)).toEqual(v);
         expect(() => inRange.orElseThrowDefault('value')).toThrowError();
         expect(() => inRange.orElseThrowCustom('value')).toThrowError();
     });
@@ -92,6 +96,7 @@ describe('Test parse as number in range negative case', () => {
         expect(exactAs.orElseGetUndefined()).toEqual(u);
         expect(exactAs.orElseGetNull()).toEqual(n);
         expect(exactAs.orElseGet(v)).toEqual(v);
+        expect(exactAs.orElseLazyGet(() => v)).toEqual(v);
         expect(() => exactAs.orElseThrowDefault('value')).toThrowError();
         expect(() => exactAs.orElseThrowCustom('value')).toThrowError();
 
@@ -99,6 +104,7 @@ describe('Test parse as number in range negative case', () => {
         expect(inRange.orElseGetUndefined()).toEqual(u);
         expect(inRange.orElseGetNull()).toEqual(n);
         expect(inRange.orElseGet(v)).toEqual(v);
+        expect(inRange.orElseLazyGet(() => v)).toEqual(v);
         expect(() => inRange.orElseThrowDefault('value')).toThrowError();
         expect(() => inRange.orElseThrowCustom('value')).toThrowError();
     });

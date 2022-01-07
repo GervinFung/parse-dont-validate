@@ -1,5 +1,6 @@
-import { createOptionsForPrimitive, Options, typeOfEqual } from '../../util';
+import { createOptionsForPrimitive, Options } from '../../util';
 import ParseError from '../../ParseError';
+import { isEqual } from 'granula-string';
 
 type ExpectedType = 'bigint' | 'number';
 type Numeric = bigint | number;
@@ -39,18 +40,16 @@ const numericOptions = <T extends Numeric>(
     max: T
 ): Options<T> => ({
     orElseGet: (u) =>
-        orElseOptional(
-            u,
-            value,
-            typeOfEqual(expectedType, receivedType),
-            min,
-            max
-        ),
+        orElseOptional(u, value, isEqual(expectedType, receivedType), min, max),
+    orElseLazyGet: (callBackFunction) =>
+        isEqual(expectedType, receivedType) && inRange(value, min, max)
+            ? (value as T)
+            : callBackFunction(),
     orElseGetUndefined: () =>
         orElseOptional(
             undefined,
             value,
-            typeOfEqual(expectedType, receivedType),
+            isEqual(expectedType, receivedType),
             min,
             max
         ),
@@ -58,7 +57,7 @@ const numericOptions = <T extends Numeric>(
         orElseOptional(
             null,
             value,
-            typeOfEqual(expectedType, receivedType),
+            isEqual(expectedType, receivedType),
             min,
             max
         ),
@@ -71,7 +70,7 @@ const numericOptions = <T extends Numeric>(
                 receivedType
             ),
             value,
-            typeOfEqual(expectedType, receivedType),
+            isEqual(expectedType, receivedType),
             min,
             max
         ),
@@ -79,7 +78,7 @@ const numericOptions = <T extends Numeric>(
         orElseThrowOptional(
             ParseError.customizedMessage(message),
             value,
-            typeOfEqual(expectedType, receivedType),
+            isEqual(expectedType, receivedType),
             min,
             max
         ),

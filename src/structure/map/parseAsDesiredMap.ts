@@ -9,7 +9,7 @@ const parseAsDesiredMap = <K, V, M extends ReadonlyMap<K, V> | Map<K, V>>(
     map: (
         val: any,
         index?: number,
-        arr?: ReadonlyArray<readonly [K, V]>
+        arr?: ReadonlyArray<Readonly<[K, V]>>
     ) => [K, V],
     immutable: boolean
 ): Options<M> =>
@@ -29,7 +29,7 @@ export const orElseGetEmptyDesiredMap = <
     map: (
         val: any,
         index?: number,
-        arr?: ReadonlyArray<readonly [K, V]>
+        arr?: ReadonlyArray<Readonly<[K, V]>>
     ) => [K, V],
     immutable: boolean
 ) =>

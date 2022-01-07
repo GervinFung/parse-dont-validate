@@ -14,13 +14,16 @@ describe('Test parse as desired number array', () => {
             true
         );
         expect(Array.isArray(parseArray.orElseGet(1))).toEqual(true);
+        expect(Array.isArray(parseArray.orElseGet(() => 1))).toEqual(true);
         expect(
-            parseArray.orElseGetNull().every((val) => typeof val === 'number')
+            parseArray
+                .orElseGetNull()
+                ?.every((val) => typeof val === 'number') ?? false
         ).toEqual(true);
         expect(
             parseArray
                 .orElseGetUndefined()
-                .every((val) => typeof val === 'number')
+                ?.every((val) => typeof val === 'number') ?? false
         ).toEqual(true);
         expect(
             parseArray
@@ -67,8 +70,8 @@ describe('Test parse as desired object array', () => {
                 ],
             ],
             (value: any) =>
-                parseAsObject(value, (obj: any) => {
-                    const arr = parseAsReadonlyArray(obj, (value: any) =>
+                parseAsObject(value, (obj: any) =>
+                    parseAsReadonlyArray(obj, (value: any) =>
                         parseAsObject(value, (obj: any) => ({
                             name: parseAsString(obj.name).orElseThrowDefault(
                                 'name'
@@ -77,23 +80,49 @@ describe('Test parse as desired object array', () => {
                                 'age'
                             ),
                         })).orElseThrowDefault('obj')
-                    ).orElseGetNull();
-                    return (
-                        arr ?? {
-                            name: parseAsString(obj.name).orElseThrowDefault(
-                                'name'
-                            ),
-                            age: parseAsNumber(obj.age).orElseThrowDefault(
-                                'age'
-                            ),
-                        }
-                    );
-                }).orElseThrowDefault('obj'),
+                    ).orElseLazyGet(() => ({
+                        name: parseAsString(obj.name).orElseThrowDefault(
+                            'name'
+                        ),
+                        age: parseAsNumber(obj.age).orElseThrowDefault('age'),
+                    }))
+                ).orElseThrowDefault('obj'),
             true
         );
         expect(Array.isArray(parseArray.orElseGet(1))).toEqual(true);
+        expect(Array.isArray(parseArray.orElseGet(() => 1))).toEqual(true);
         expect(
-            parseArray.orElseGetNull().every((val) => {
+            parseArray.orElseGetNull()?.every((val) => {
+                if (Array.isArray(val)) {
+                    return val.every(
+                        ({ name, age }) =>
+                            typeof name === 'string' && typeof age === 'number'
+                    );
+                }
+                const { name, age } = val as {
+                    name: string;
+                    age: number;
+                };
+                return typeof name === 'string' && typeof age === 'number';
+            }) ?? false
+        ).toEqual(true);
+        expect(
+            parseArray.orElseGetUndefined()?.every((val) => {
+                if (Array.isArray(val)) {
+                    return val.every(
+                        ({ name, age }) =>
+                            typeof name === 'string' && typeof age === 'number'
+                    );
+                }
+                const { name, age } = val as {
+                    name: string;
+                    age: number;
+                };
+                return typeof name === 'string' && typeof age === 'number';
+            }) ?? false
+        ).toEqual(true);
+        expect(
+            parseArray.orElseThrowDefault('val').every((val) => {
                 if (Array.isArray(val)) {
                     return val.every(
                         ({ name, age }) =>
@@ -108,37 +137,7 @@ describe('Test parse as desired object array', () => {
             })
         ).toEqual(true);
         expect(
-            parseArray.orElseGetNull().every((val) => {
-                if (Array.isArray(val)) {
-                    return val.every(
-                        ({ name, age }) =>
-                            typeof name === 'string' && typeof age === 'number'
-                    );
-                }
-                const { name, age } = val as {
-                    name: string;
-                    age: number;
-                };
-                return typeof name === 'string' && typeof age === 'number';
-            })
-        ).toEqual(true);
-        expect(
-            parseArray.orElseGetNull().every((val) => {
-                if (Array.isArray(val)) {
-                    return val.every(
-                        ({ name, age }) =>
-                            typeof name === 'string' && typeof age === 'number'
-                    );
-                }
-                const { name, age } = val as {
-                    name: string;
-                    age: number;
-                };
-                return typeof name === 'string' && typeof age === 'number';
-            })
-        ).toEqual(true);
-        expect(
-            parseArray.orElseGetNull().every((val) => {
+            parseArray.orElseThrowCustom('impossible to throw').every((val) => {
                 if (Array.isArray(val)) {
                     return val.every(
                         ({ name, age }) =>
@@ -165,6 +164,15 @@ describe('Test parse as desired array negative case', () => {
             true
         );
         expect(parseArray.orElseGet(1)).toEqual(1);
+        expect(
+            parseArray.orElseLazyGet(() => ({
+                name: 'Yo',
+                age: 1999,
+            }))
+        ).toEqual({
+            name: 'Yo',
+            age: 1999,
+        });
         expect(parseArray.orElseGetNull()).toEqual(null);
         expect(parseArray.orElseGetUndefined()).toEqual(undefined);
         expect(() => parseArray.orElseThrowDefault('arr')).toThrowError();

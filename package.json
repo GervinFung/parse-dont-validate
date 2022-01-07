@@ -1,11 +1,11 @@
 {
     "name": "parse-dont-validate",
     "description": "Verify the integrity of the data and return it in expected shape, otherwise throw error or return a specified default value",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "./build/index.js",
     "license": "MIT",
     "type": "module",
-    "types": "./build",
+    "types": "./build/index.d.ts",
     "scripts": {
         "build": "rm -rf build && tsc && yarn add-js-extension",
         "build-prod": "rm -rf build && tsc && yarn add-js-extension-prod",
@@ -23,6 +23,7 @@
         "build"
     ],
     "devDependencies": {
+        "@babel/plugin-transform-modules-commonjs": "^7.16.7",
         "@babel/preset-env": "^7.15.8",
         "@babel/preset-typescript": "^7.15.0",
         "@types/jest": "^27.0.2",
@@ -38,5 +39,8 @@
         "validate",
         "don't validate",
         "parse, don't validate"
-    ]
+    ],
+    "dependencies": {
+        "granula-string": "^1.0.2"
+    }
 }

@@ -29,15 +29,16 @@ describe('Test parse as desired key value number pair map', () => {
             true
         );
         expect(isMap(parseMap.orElseGet(1))).toEqual(true);
+        expect(isMap(parseMap.orElseLazyGet(() => 1))).toEqual(true);
         expect(
-            Array.from(parseMap.orElseGetNull()).every(
-                ([k, v]) => typeof k === 'number' && typeof v === 'number'
-            )
+            Array.from(
+                parseMap.orElseGetNull() ?? new Map().set('bool', '123')
+            ).every(([k, v]) => typeof k === 'number' && typeof v === 'number')
         ).toEqual(true);
         expect(
-            Array.from(parseMap.orElseGetUndefined()).every(
-                ([k, v]) => typeof k === 'number' && typeof v === 'number'
-            )
+            Array.from(
+                parseMap.orElseGetUndefined() ?? new Map().set('bool', '123')
+            ).every(([k, v]) => typeof k === 'number' && typeof v === 'number')
         ).toEqual(true);
         expect(
             Array.from(parseMap.orElseThrowDefault('arr')).every(
@@ -76,15 +77,20 @@ describe('Test parse as desired key(number) value(string | boolean) pair map', (
             true
         );
         expect(isMap(parseMap.orElseGet(1))).toEqual(true);
+        expect(isMap(parseMap.orElseLazyGet(() => 1))).toEqual(true);
         expect(
-            Array.from(parseMap.orElseGetNull()).every(
+            Array.from(
+                parseMap.orElseGetNull() ?? new Map().set('bool', '123')
+            ).every(
                 ([k, v]) =>
                     typeof k === 'number' &&
                     (typeof v === 'boolean' || typeof v === 'string')
             )
         ).toEqual(true);
         expect(
-            Array.from(parseMap.orElseGetUndefined()).every(
+            Array.from(
+                parseMap.orElseGetUndefined() ?? new Map().set('bool', '123')
+            ).every(
                 ([k, v]) =>
                     typeof k === 'number' &&
                     (typeof v === 'boolean' || typeof v === 'string')
@@ -117,6 +123,15 @@ describe('Test parse as desired map negative cases', () => {
             true
         );
         expect(parseMap.orElseGet(1)).toEqual(1);
+        expect(
+            parseMap.orElseLazyGet(() => ({
+                name: 'Yo',
+                age: 1999,
+            }))
+        ).toEqual({
+            name: 'Yo',
+            age: 1999,
+        });
         expect(parseMap.orElseGetNull()).toEqual(null);
         expect(parseMap.orElseGetUndefined()).toEqual(undefined);
         expect(() => parseMap.orElseThrowDefault('arr')).toThrowError();
