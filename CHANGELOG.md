@@ -1,5 +1,9 @@
 ## 1.0.2 (12 Feb 2022)
 
+* Added parseAsCustomType in export statement
+
+## 1.0.2 (12 Feb 2022)
+
 * Added parseAsCustomType for parsing as a specific type of non-object type
 * Changed spelling typo of `parsedAs` to `parseAs` 
 

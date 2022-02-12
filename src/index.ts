@@ -18,6 +18,8 @@ import parseAsArray from './structure/array/parseAsArray';
 // set
 import parseAsReadonlySet from './structure/set/parseAsReadonlySet';
 import parseAsSet from './structure/set/parseAsSet';
+// custom
+import parseAsCustomType from './structure/custom/parseAsCustomType';
 
 export {
     parseAsBigInt,
@@ -36,4 +38,5 @@ export {
     parseAsSet,
     parseAsReadonlyArray,
     parseAsArray,
+    parseAsCustomType,
 };
