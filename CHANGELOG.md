@@ -1,3 +1,8 @@
+## 1.0.2 (12 Feb 2022)
+
+* Added parseAsCustomType for parsing as a specific type of non-object type
+* Changed spelling typo of `parsedAs` to `parseAs` 
+
 ## 1.0.1 (7 Jan 2022)
 
 * Changed types in package.json to direct to proper definition as previously I did not point it to index.d.ts

@@ -2,7 +2,7 @@ import parseAsDesiredMap, {
     orElseGetEmptyDesiredMap,
 } from './parseAsDesiredMap';
 
-const parsedAsReadonlyMap = <K, V>(
+const parseAsReadonlyMap = <K, V>(
     value: unknown,
     map: (
         val: any,
@@ -15,4 +15,4 @@ const parsedAsReadonlyMap = <K, V>(
         orElseGetEmptyDesiredMap(value, map, true),
 });
 
-export default parsedAsReadonlyMap;
+export default parseAsReadonlyMap;

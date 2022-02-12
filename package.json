@@ -1,18 +1,16 @@
 {
     "name": "parse-dont-validate",
     "description": "Verify the integrity of the data and return it in expected shape, otherwise throw error or return a specified default value",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "main": "./build/index.js",
     "license": "MIT",
     "type": "module",
     "types": "./build/index.d.ts",
     "scripts": {
         "build": "rm -rf build && tsc && yarn add-js-extension",
-        "build-prod": "rm -rf build && tsc && yarn add-js-extension-prod",
-        "test": "jest",
-        "add-js-extension-prod": "ts-add-js-extension add --dir=build --keepComments=true --minify=true",
+        "test": "jest test",
         "add-js-extension": "ts-add-js-extension add --dir=build",
-        "code-cov": "jest --coverage --coverageDirectory='coverage'"
+        "code-cov": "yarn test --coverage --coverageDirectory='coverage'"
     },
     "bugs": "https://github.com/P-YNPM/parse-dont-validate/issues",
     "repository": {
@@ -29,7 +27,7 @@
         "@types/jest": "^27.0.2",
         "@types/node": "^16.11.10",
         "jest": "^27.3.1",
-        "ts-add-js-extension": "^0.0.5",
+        "ts-add-js-extension": "^1.0.1",
         "ts-jest": "^27.0.7",
         "typescript": "^4.4.4"
     },

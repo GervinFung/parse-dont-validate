@@ -2,7 +2,7 @@ import parseAsDesiredMap, {
     orElseGetEmptyDesiredMap,
 } from './parseAsDesiredMap';
 
-const parsedAsMap = <K, V>(
+const parseAsMap = <K, V>(
     value: unknown,
     map: (
         val: any,
@@ -15,4 +15,4 @@ const parsedAsMap = <K, V>(
         orElseGetEmptyDesiredMap(value, map, false),
 });
 
-export default parsedAsMap;
+export default parseAsMap;

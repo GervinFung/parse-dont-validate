@@ -2,7 +2,7 @@ import parseAsDesiredArray, {
     orElseGetEmptyDesiredArray,
 } from './parseAsDesiredArray';
 
-const parsedAsArray = <T>(
+const parseAsArray = <T>(
     value: unknown,
     map: (val: any, index?: number, arr?: ReadonlyArray<T>) => T
 ) => ({
@@ -10,4 +10,4 @@ const parsedAsArray = <T>(
     orElseGetEmptyArray: () => orElseGetEmptyDesiredArray(value, map, false),
 });
 
-export default parsedAsArray;
+export default parseAsArray;

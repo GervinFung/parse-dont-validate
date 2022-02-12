@@ -2,7 +2,7 @@ import parseAsDesiredSet, {
     orElseGetEmptyDesiredSet,
 } from './parseAsDesiredSet';
 
-const parsedAsSet = <T>(
+const parseAsSet = <T>(
     value: unknown,
     map: (val: any, index?: number, arr?: ReadonlyArray<T>) => T
 ) => ({
@@ -10,4 +10,4 @@ const parsedAsSet = <T>(
     orElseGetEmptySet: () => orElseGetEmptyDesiredSet(value, map, false),
 });
 
-export default parsedAsSet;
+export default parseAsSet;

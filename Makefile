@@ -1,2 +1,2 @@
 publish: 
-		git push && yarn build-prod && npm publish
+	git push && yarn build && npm publish

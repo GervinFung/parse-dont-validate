@@ -23,16 +23,17 @@ Due to this, I had made it such that using the readonly functionalities provided
 10. array, readonly and mutable 
 11. map, readonly and mutable
 12. set, readonly and mutable
+13. custom type
 ## **_Question_**
 
 `Why do I build this?`
 
 I faced an issue of verifying the shape of the data I needed by calling 3rd party API, although I managed to do it, my intern supervisor (Wong Jia Hau) told me that was a very bad design (See example below)
 ```ts
-type Human = {
-    readonly name: string;
-    readonly age: number;
-} & typeof Object
+type Human = Readonly<{
+    name: string;
+    age: number;
+}> & typeof Object
 ```
 There are several issues with this approach
 1. What if name is possibly undefined? 
@@ -97,7 +98,7 @@ Why not? Feel free to raise an issue if you have a question, an enhancement, or 
 I appreciate that you are even reading this, I am indeed flattered, even more so if you are willing to contribute
 Before you dive in, I'd like to have a few words about contributing.
 
-    Use TypeScript
+    Please use TypeScript
     Write Test Code
 
 ## **_How to use_**
