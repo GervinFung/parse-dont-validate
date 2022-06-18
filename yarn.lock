@@ -1766,6 +1766,13 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
+console-table-printer@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/console-table-printer/-/console-table-printer-2.11.0.tgz#704a74cb56d66267a2527f500fedcaa78ca76259"
+  integrity sha512-F5H5/lFciTV2OBI/xDh/x7nZAM6YPqkbkoIxr8px4B/nSvUV4ymsi4BL0bwRwrRcOgtp/LqGJGgGmkicAMd8LQ==
+  dependencies:
+    simple-wcswidth "^1.0.1"
+
 convert-source-map@^1.4.0, convert-source-map@^1.6.0, convert-source-map@^1.7.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.8.0.tgz#f3373c32d21b4d780dd8004514684fb791ca4369"
@@ -3263,6 +3270,11 @@ signal-exit@^3.0.2, signal-exit@^3.0.3:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.6.tgz#24e630c4b0f03fea446a2bd299e62b4a6ca8d0af"
   integrity sha512-sDl4qMFpijcGw22U5w63KmD3cZJfBuFlVNbVMKje2keoKML7X2UzWbc4XrmEbDwg0NXJc3yv4/ox7b+JWb57kQ==
 
+simple-wcswidth@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/simple-wcswidth/-/simple-wcswidth-1.0.1.tgz#8ab18ac0ae342f9d9b629604e54d2aa1ecb018b2"
+  integrity sha512-xMO/8eNREtaROt7tJvWJqHBDTMFN4eiQ5I4JRMuilwfnFcV5W9u7RUkueNkdw0jPqGMX36iCywelS5yilTuOxg==
+
 sisteransi@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"
@@ -3431,12 +3443,13 @@ tr46@^2.1.0:
   dependencies:
     punycode "^2.1.1"
 
-ts-add-js-extension@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ts-add-js-extension/-/ts-add-js-extension-1.0.1.tgz#9236407f536fdf53332ceb5560d129871dbf3622"
-  integrity sha512-rqCXoQAMBjQUNQA10rmx+qb58ZeRT42DxbCLlspgxsbM6+Kfs++ikbpGrxS+epBEF6cTy4lJmXtGcJB8ouWxZg==
+ts-add-js-extension@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ts-add-js-extension/-/ts-add-js-extension-1.2.0.tgz#c1fdae1542f57219e97cee0a95d9eb02a04ad75d"
+  integrity sha512-uELVJHfmOn/STtBY4l7vOH2VGc0Cq1wz3BUsfHcYAjWHzmN3G+lh4MnLtKCf3aKGFY047BI/E5GnV75zKI7g1g==
   dependencies:
     "@typescript-eslint/typescript-estree" "^5.4.0"
+    console-table-printer "^2.11.0"
     parse-dont-validate "^1.0.1"
     yargs "^17.3.0"
 

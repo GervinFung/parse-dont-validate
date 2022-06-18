@@ -1,14 +1,15 @@
 {
     "name": "parse-dont-validate",
-    "description": "Verify the integrity of the data and return it in expected shape, otherwise throw error or return a specified default value",
-    "version": "1.0.3",
-    "main": "./build/index.js",
+    "description": "Verify the integrity of the data and return it in expected shape. Otherwise throw error or return a specified default value",
+    "version": "2.0.0",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
     "license": "MIT",
     "type": "module",
-    "types": "./build/index.d.ts",
     "scripts": {
         "build": "rm -rf build && tsc && yarn add-js-extension",
-        "test": "jest test",
+        "test": "jest -i",
+        "typecheck": "tsc",
         "add-js-extension": "ts-add-js-extension add --dir=build",
         "code-cov": "yarn test --coverage --coverageDirectory='coverage'"
     },
@@ -27,18 +28,15 @@
         "@types/jest": "^27.0.2",
         "@types/node": "^16.11.10",
         "jest": "^27.3.1",
-        "ts-add-js-extension": "^1.0.1",
+        "ts-add-js-extension": "^1.2.0",
         "ts-jest": "^27.0.7",
         "typescript": "^4.4.4"
     },
     "keywords": [
-        "parse",
+        "parse json",
         "parse variable",
         "validate",
         "don't validate",
         "parse, don't validate"
-    ],
-    "dependencies": {
-        "granula-string": "^1.0.2"
-    }
+    ]
 }

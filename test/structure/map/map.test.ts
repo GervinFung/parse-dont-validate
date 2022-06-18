@@ -3,13 +3,13 @@ import parseAsMap from '../../../src/structure/map/parseAsMap';
 import parseAsReadonlyMap from '../../../src/structure/map/parseAsReadonlyMap';
 import parseAsString from '../../../src/primitive/parseAsString';
 import parseAsBoolean from '../../../src/primitive/parseAsBoolean';
-import parseAsNumber from '../../../src/primitive/numeric/parseAsNumber';
+import parseAsNumber from '../../../src/primitive/parseAsNumber';
 import { isMap } from 'util/types';
 
 describe('Test parse as desired key value number pair map', () => {
     test('parse as desired key value number pair map', () => {
         const parseMap = parseAsDesiredMap(
-            new Map<number, number>()
+            new Map()
                 .set(1, 1)
                 .set(2, 1)
                 .set(3, 1)
@@ -56,7 +56,7 @@ describe('Test parse as desired key value number pair map', () => {
 describe('Test parse as desired key(number) value(string | boolean) pair map', () => {
     test('parse as desired key(number) value(string | boolean) pair map', () => {
         const parseMap = parseAsDesiredMap(
-            new Map<number, string | boolean>()
+            new Map()
                 .set(1, 'one')
                 .set(2, 'two')
                 .set(3, true)

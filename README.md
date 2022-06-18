@@ -1,29 +1,40 @@
 # **Parse, don't validate**
-    "Parse, don't validate" is an approach to modeling data
-    So that it is impossible to construct without verifying the integrity of the data first
-    Thus when using such data, one can be sure that it is already in the correct shape and no further validation is necessary
-    In short, this approach makes it explicit where your data gets refined
+```
+"Parse, don't validate" is an approach to modeling data
+So that it is impossible to construct without verifying the integrity of the data first
+Thus when using such data, one can be sure that it is already in the correct shape
+Therefore, no further validation is necessary
+In short, this approach makes it explicit where your data gets refined
+```
 
 ### This package covers the following type, which is basically what I needed
+
+### Previously supported type (prior to 2.0.0)
+**Note**:
+Below are the list of type that cannot be stringified by JSON
+1. bigint
+2. function
+3. symbol
+4. undefined
+
+### Supported type
+1. boolean
+2. number
+3. string
+4. null
+5. object, readonly and mutable
+6. array, readonly and mutable 
+7. map, readonly and mutable
+8. set, readonly and mutable
+9. custom type
+
 **Note**:
 Please understand that readonly will still create Mutable Object, Array, Map and Set in JavaScript
 This is because readonly modifier only prevent developer from mutating a data structure in TypeScript
 Thus the transpiled JavaScript will behave without mutation and will not need a readonly modifier
-Due to this, I had made it such that using the readonly functionalities provided will throw RunTimeError when there's an attempt to mutate it
+Due to this, I had made it such that using the readonly functions provided will throw RunTimeError when there's an attempt to mutate it
 
-1. bigint
-2. boolean
-3. function
-4. number
-5. string
-6. symbol
-7. undefined
-8. null
-9. object, readonly and mutable
-10. array, readonly and mutable 
-11. map, readonly and mutable
-12. set, readonly and mutable
-13. custom type
+
 ## **_Question_**
 
 `Why do I build this?`
@@ -53,7 +64,7 @@ Thus I wrote this package to solve my own problem :)
 
 `What are the functionalities?`
 
-In general, once a parsing function is called, it returns an Options object that contains the following functions
+In general, once a parsing function `parseAsBoolean(true)` for example is called, it returns an Options object that generally contains the following functions
 1. `orElseLazyGet(callback function to return alternative value for lazy loading purpose)`
 2. `orElseGet(alternative value that will be computed immediately)`
 3. `orElseGetUndefined()`

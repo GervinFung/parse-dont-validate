@@ -1,4 +1,4 @@
-import parseAsNumber from '../../../src/primitive/numeric/parseAsNumber';
+import parseAsNumber from '../../src/primitive/parseAsNumber';
 
 describe('Test parse as number positive case', () => {
     test.each([
