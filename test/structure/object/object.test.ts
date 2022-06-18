@@ -2,7 +2,7 @@ import parseAsDesiredObject from '../../../src/structure/object/parseAsDesiredOb
 import parseAsReadonlyArray from '../../../src/structure/array/parseAsReadonlyArray';
 import parseAsString from '../../../src/primitive/parseAsString';
 import parseAsBoolean from '../../../src/primitive/parseAsBoolean';
-import parseAsNumber from '../../../src/primitive/numeric/parseAsNumber';
+import parseAsNumber from '../../../src/primitive/parseAsNumber';
 
 describe('Test parse as object positive case', () => {
     test.each([

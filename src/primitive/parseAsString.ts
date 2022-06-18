@@ -1,37 +1,37 @@
-import { isEqual } from 'granula-string';
-import { Options, createOptionsForPrimitive, createExact } from '../util';
+import {
+    Options,
+    createOptionsForPrimitive,
+    createExact,
+    isEqual,
+} from '../util';
 
-type StringOptions<T extends string> = Options<T> & {
-    orElseGetEmptyString: () => '' | T;
-};
+type StringOptions<T extends string> = Options<T> &
+    Readonly<{
+        orElseGetEmptyString: () => '' | T;
+    }>;
 
 const parseAsString = (
     value: unknown
-): StringOptions<string> & {
-    /**
-     * @exact the exact value you expect the parsed value to be
-     *
-     * ```ts
-     * Example:
-     * const name: unknown = 'name'
-     * const str = parseAsString(name).exactlyAs('name').orElseGetUndefined()
-     * // the type of str in this case would be "'name' | undefined" instead of "string | undefined"
-     * ```
-     *
-     * @returns the StringOptions objects
-     * **/
-    exactlyAs: <T extends string>(t: T) => StringOptions<T>;
-} => {
+): StringOptions<string> &
+    Readonly<{
+        exactlyAs: <T extends string>(t: T) => StringOptions<T>;
+    }> => {
     const expectedType = 'string';
-    const receivedType = typeof value;
+    const actualType = typeof value;
     return {
-        ...createOptionsForPrimitive(value, expectedType, receivedType),
-        orElseGetEmptyString: () =>
-            isEqual(expectedType, receivedType) ? (value as string) : '',
-        exactlyAs: (t) => ({
-            ...createExact(value, expectedType, receivedType, t),
+        ...{
+            ...createOptionsForPrimitive<string>(
+                value,
+                expectedType,
+                actualType
+            ),
             orElseGetEmptyString: () =>
-                isEqual(expectedType, receivedType) ? t : '',
+                isEqual(expectedType, actualType) ? (value as string) : '',
+        },
+        exactlyAs: (t) => ({
+            ...createExact(value, expectedType, actualType, t),
+            orElseGetEmptyString: () =>
+                isEqual(expectedType, actualType) ? t : '',
         }),
     };
 };

@@ -1,7 +1,8 @@
-import { isEqual } from 'granula-string';
 import ParseError from './ParseError';
 
-export type Options<T> = {
+export const isEqual = (c: string, d: string) => c === d;
+
+export type Options<T> = Readonly<{
     /**
      * @param u the alternative value to return if the data type does not match and have failed to parse, precompute instead of lazily loaded
      * @returns the parsed value, otherwise the alternative value
@@ -37,9 +38,9 @@ export type Options<T> = {
      * @returns the parsed value
      * */
     orElseThrowCustom: (message: string) => T;
-};
+}>;
 
-const orElseThrowOptional = <T>(
+const orElseThrow = <T>(
     t: unknown,
     parseAble: boolean,
     error: ParseError
@@ -56,7 +57,7 @@ export const isExact = <T, M extends T>(m: M, u: unknown, parseAble: boolean) =>
 const createOptionsWithParseable = <T>(
     value: unknown,
     expectedType: string,
-    receivedType: string,
+    actualType: string,
     isParseable: boolean
 ): Options<T> => ({
     orElseGet: (u) => (isParseable ? (value as T) : u),
@@ -65,42 +66,38 @@ const createOptionsWithParseable = <T>(
     orElseGetUndefined: () => (isParseable ? (value as T) : undefined),
     orElseGetNull: () => (isParseable ? (value as T) : null),
     orElseThrowDefault: (name): T =>
-        orElseThrowOptional(
+        orElseThrow(
             value,
             isParseable,
-            ParseError.defaultMessage(name, value, expectedType, receivedType)
+            ParseError.defaultMessage(name, value, expectedType, actualType)
         ),
     orElseThrowCustom: (message: string): T =>
-        orElseThrowOptional(
-            value,
-            isParseable,
-            ParseError.customizedMessage(message)
-        ),
+        orElseThrow(value, isParseable, ParseError.customizedMessage(message)),
 });
 
 export const createExact = <T, M extends T>(
     value: unknown,
     expectedType: string,
-    receivedType: string,
+    actualType: string,
     m: M
 ): Options<T> =>
     createOptionsWithParseable(
         value,
         `${m}`,
-        receivedType,
-        isExact(m, value, isEqual(expectedType, receivedType))
+        actualType,
+        isExact(m, value, isEqual(expectedType, actualType))
     );
 
 export const createOptionsForPrimitive = <T>(
     value: unknown,
     expectedType: string,
-    receivedType: string
+    actualType: string
 ): Options<T> =>
     createOptionsWithParseable(
         value,
         expectedType,
-        receivedType,
-        isEqual(expectedType, receivedType)
+        actualType,
+        isEqual(expectedType, actualType)
     );
 
 type MutableDataStructType = 'Map' | 'Array' | 'Set';
@@ -109,18 +106,18 @@ type ReadonlyDataStructType = 'ReadonlyMap' | 'ReadonlyArray' | 'ReadonlySet';
 const getMutableType = (variableValue: unknown) =>
     Object.prototype.toString.call(variableValue).slice(8, -1);
 
-const getIterableExpectedAndReceivedType = (
+const getIterableExpectedAndactualType = (
     value: unknown,
     immutable: boolean,
     type: MutableDataStructType
-): {
+): Readonly<{
     expectedType: MutableDataStructType | ReadonlyDataStructType;
-    receivedType: string;
-} => {
+    actualType: string;
+}> => {
     const mutableType = getMutableType(value);
     return {
         expectedType: immutable ? `Readonly${type}` : type,
-        receivedType: immutable ? `Readonly${mutableType}` : mutableType,
+        actualType: immutable ? `Readonly${mutableType}` : mutableType,
     };
 };
 
@@ -129,12 +126,12 @@ export const structTypeOfEqual = (
     immutable: boolean,
     type: MutableDataStructType
 ) => {
-    const { expectedType, receivedType } = getIterableExpectedAndReceivedType(
+    const { expectedType, actualType } = getIterableExpectedAndactualType(
         value,
         immutable,
         type
     );
-    return isEqual(expectedType, receivedType);
+    return isEqual(expectedType, actualType);
 };
 
 export const freeze = <G>(g: G, freeze: boolean) =>
@@ -148,17 +145,16 @@ export const createOptionsForStructure = <T extends object>(
 ): Options<T> => ({
     orElseGet: (u) =>
         freeze(
-            structTypeOfEqual(value, immutable, type) ? (value as T) : u,
+            structTypeOfEqual(value, immutable, type) ? callBackFunction() : u,
             immutable
         ),
-    orElseLazyGet: (callBackFunction) =>
+    orElseLazyGet: (lazyCallBackFunction) =>
         freeze(
             structTypeOfEqual(value, immutable, type)
-                ? (value as T)
-                : callBackFunction(),
+                ? callBackFunction()
+                : lazyCallBackFunction(),
             immutable
         ),
-
     orElseGetUndefined: () =>
         structTypeOfEqual(value, immutable, type)
             ? freeze(callBackFunction(), immutable)
@@ -171,14 +167,12 @@ export const createOptionsForStructure = <T extends object>(
         if (structTypeOfEqual(value, immutable, type)) {
             return freeze(callBackFunction(), immutable);
         }
-        const { expectedType, receivedType } =
-            getIterableExpectedAndReceivedType(value, immutable, type);
-        throw ParseError.defaultMessage(
-            name,
+        const { expectedType, actualType } = getIterableExpectedAndactualType(
             value,
-            expectedType,
-            receivedType
+            immutable,
+            type
         );
+        throw ParseError.defaultMessage(name, value, expectedType, actualType);
     },
     orElseThrowCustom: (message: string): T => {
         if (structTypeOfEqual(value, immutable, type)) {

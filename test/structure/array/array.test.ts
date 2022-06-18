@@ -2,7 +2,7 @@ import parseAsDesiredArray from '../../../src/structure/array/parseAsDesiredArra
 import parseAsReadonlyArray from '../../../src/structure/array/parseAsReadonlyArray';
 import parseAsArray from '../../../src/structure/array/parseAsArray';
 import parseAsString from '../../../src/primitive/parseAsString';
-import parseAsNumber from '../../../src/primitive/numeric/parseAsNumber';
+import parseAsNumber from '../../../src/primitive/parseAsNumber';
 import parseAsObject from '../../../src/structure/object/parseAsObject';
 
 describe('Test parse as desired number array', () => {

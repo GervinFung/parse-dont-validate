@@ -2,7 +2,7 @@ import parseAsDesiredSet from '../../../src/structure/set/parseAsDesiredSet';
 import parseAsReadonlySet from '../../../src/structure/set/parseAsReadonlySet';
 import parseAsSet from '../../../src/structure/set/parseAsSet';
 import parseAsString from '../../../src/primitive/parseAsString';
-import parseAsNumber from '../../../src/primitive/numeric/parseAsNumber';
+import parseAsNumber from '../../../src/primitive/parseAsNumber';
 import parseAsObject from '../../../src/structure/object/parseAsObject';
 import { isSet } from 'util/types';
 

@@ -7,14 +7,14 @@ export default class ParseError extends Error {
         name: string,
         value: unknown,
         expectedType: string,
-        receivedType: string
+        actualType: string
     ) =>
         new ParseError(
-            `Expect "${name}": ${
+            `expect "${name}": ${
                 typeof value === 'object'
                     ? JSON.stringify(value, null, 2)
                     : value
-            } to have type "${expectedType}", actual type is "${receivedType}" instead`
+            } to have type "${expectedType}", actual type is "${actualType}" instead`
         );
 
     static customizedMessage = (message: string) => new ParseError(message);

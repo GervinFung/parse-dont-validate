@@ -10,7 +10,7 @@ const parseAsMap = <K, V>(
         arr?: ReadonlyArray<readonly [K, V]>
     ) => [K, V]
 ) => ({
-    ...parseAsDesiredMap<K, V, Map<K, V>>(value, map, true),
+    ...parseAsDesiredMap<K, V, Map<K, V>>(value, map, false),
     orElseGetEmptyMap: (): Map<K, V> =>
         orElseGetEmptyDesiredMap(value, map, false),
 });
