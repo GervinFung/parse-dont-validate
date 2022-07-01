@@ -1,7 +1,11 @@
-## 2.0.0 (18 Jun 2022)
+## 2.0.1 (18 Jun 2022)
+
+-   Removed parser for `map` and `set` as it cannot be stringified by JSON (really forgot about it)
+
+## 2.0.0 (1 July 2022)
 
 -   Removed parser for `bigint`, `Symbol`, `undefined` and `function` as it cannot be stringified by JSON
--   Removed dependencies
+-   Removed unused dependencies
 
 ## 1.0.3 (12 Feb 2022)
 

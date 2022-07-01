@@ -1,14 +1,14 @@
 {
     "name": "parse-dont-validate",
     "description": "Verify the integrity of the data and return it in expected shape. Otherwise throw error or return a specified default value",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "license": "MIT",
     "type": "module",
     "scripts": {
         "build": "rm -rf build && tsc && yarn add-js-extension",
-        "test": "jest -i",
+        "test": "jest -runInBand",
         "typecheck": "tsc",
         "add-js-extension": "ts-add-js-extension add --dir=build",
         "code-cov": "yarn test --coverage --coverageDirectory='coverage'"
