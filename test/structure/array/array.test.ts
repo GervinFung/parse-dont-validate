@@ -4,11 +4,12 @@ import parseAsArray from '../../../src/structure/array/parseAsArray';
 import parseAsString from '../../../src/primitive/parseAsString';
 import parseAsNumber from '../../../src/primitive/parseAsNumber';
 import parseAsObject from '../../../src/structure/object/parseAsObject';
+import turnToJsonData from '../util';
 
 describe('Test parse as desired number array', () => {
     test('parse as desired number array', () => {
         const parseArray = parseAsDesiredArray(
-            [1, 2, 3, 4, 5],
+            turnToJsonData([1, 2, 3, 4, 5]),
             (value: unknown) =>
                 parseAsNumber(value).orElseThrowDefault('value'),
             true
@@ -41,7 +42,7 @@ describe('Test parse as desired number array', () => {
 describe('Test parse as desired object array', () => {
     test('parse as desired object array', () => {
         const parseArray = parseAsDesiredArray(
-            [
+            turnToJsonData([
                 {
                     name: 'Wendy',
                     age: 20,
@@ -68,7 +69,7 @@ describe('Test parse as desired object array', () => {
                         age: 19,
                     },
                 ],
-            ],
+            ]),
             (value: any) =>
                 parseAsObject(value, (obj: any) =>
                     parseAsReadonlyArray(obj, (value: any) =>

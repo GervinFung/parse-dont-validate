@@ -1,4 +1,5 @@
 # **Parse, don't validate**
+
 ```
 "Parse, don't validate" is an approach to modeling data
 So that it is impossible to construct without verifying the integrity of the data first
@@ -7,64 +8,61 @@ Therefore, no further validation is necessary
 In short, this approach makes it explicit where your data gets refined
 ```
 
-### This package covers the following type, which is basically what I needed
+### This package can parse the following type, which is basically valid JSON data
 
-### Previously supported type (prior to 2.0.0)
-**Note**:
-Below are the list of type that cannot be stringified by JSON
-1. bigint
-2. function
-3. symbol
-4. undefined
-
-### Supported type
 1. boolean
 2. number
 3. string
 4. null
 5. object, readonly and mutable
-6. array, readonly and mutable 
-7. map, readonly and mutable
-8. set, readonly and mutable
-9. custom type
+6. array, readonly and mutable
+7. custom type
 
 **Note**:
-Please understand that readonly will still create Mutable Object, Array, Map and Set in JavaScript
-This is because readonly modifier only prevent developer from mutating a data structure in TypeScript
-Thus the transpiled JavaScript will behave without mutation and will not need a readonly modifier
-Due to this, I had made it such that using the readonly functions provided will throw RunTimeError when there's an attempt to mutate it
+Please understand that readonly will still create Mutable Object and Array in JavaScript. This is because readonly modifier only prevent developer from mutating a data structure in TypeScript
 
+Thus the transpiled JavaScript will behave without mutation and will not need a readonly modifier
+
+Due to this, I had made it such that using the readonly functions provided will throw Error when there's an attempt to mutate it
 
 ## **_Question_**
 
 `Why do I build this?`
 
-I faced an issue of verifying the shape of the data I needed by calling 3rd party API, although I managed to do it, my intern supervisor (Wong Jia Hau) told me that was a very bad design (See example below)
+I faced an issue of verifying the shape of the data I needed by calling Third party API or doing web scrapping, although I managed to do it, my intern supervisor (Wong Jia Hau) told me that was a very bad design (See example below)
+
 ```ts
 type Human = Readonly<{
     name: string;
     age: number;
-}> & typeof Object
+}>;
 ```
+
 There are several issues with this approach
-1. What if name is possibly undefined? 
+
+1. What if name is possibly undefined?
 2. What if they changed the API schema?
 3. Down casting as shown by the example above is always bad
 
-A much better way would to parse it
+To sum up the problems with this approach, I am assuming the shape and type of the data without any validation
+
+Hence the hidden danger is **down-casting**, be it implicit or explicit. A much better way would to parse it
+
 ```ts
 const parse = (name: unknown) => {
     if (typeof name === 'string') {
-        return name //it is already string at this point
+        return name; //it is already string at this point
     }
-    throw new Error('name is not string')
-}
+    throw new Error('name is not string');
+};
 ```
-Thus I wrote this package to solve my own problem :)
 
-`What are the functionalities?`
+Instead of just validating and return true false, the type information is passed down by using the method shown above, so whenever `parse` function is called, it will return string and throw error if it's not string
 
-In general, once a parsing function `parseAsBoolean(true)` for example is called, it returns an Options object that generally contains the following functions
+### What are the functionalities?
+
+In general, once a parsing function like `parseAsBoolean(true)` for example is called, it returns an Options object that generally contains the following functions
+
 1. `orElseLazyGet(callback function to return alternative value for lazy loading purpose)`
 2. `orElseGet(alternative value that will be computed immediately)`
 3. `orElseGetUndefined()`
@@ -72,45 +70,47 @@ In general, once a parsing function `parseAsBoolean(true)` for example is called
 5. `orElseThrowDefault(variable name)`
 6. `orElseThrowCustom(custom message)`
 
-For data structure such as map, array, set and object, the second parameter will be a callback function which you write your parsing for each element in the array. See the code below
+For data structure such as array and object, the second parameter will be a callback function which you write your parsing for each element in the array. See the code below
+
 ```ts
 const parseArray = parseAsReadonlyArray(
     [1, 2, 3, 4, 5], (value => parseAsNumber(value).orElseThrowDefault('value')
 ).orElseGetReadonlyEmptyArray();
 ```
-**Note**:
-For more specific function for each different type, please refer to the code
 
-`How do I use it?`
+### How do I use it?
+
 ```ts
-import { parseAsString } from 'parse-dont-validate'
+import { parseAsString } from 'parse-dont-validate';
 
-const name = '123' //assume we don't know it's string
+const name = '123'; //assume we don't know it's string
 
-const parsed = parseAsString(name).orElseGet('123')
+const parsed = parseAsString(name).orElseGet('123');
 // OR
-const parsed = parseAsString(name).orElseLazyGet(() => '123')
+const parsed = parseAsString(name).orElseLazyGet(() => '123');
 // OR
-const parsed = parseAsString(name).orElseGetNull()
+const parsed = parseAsString(name).orElseGetNull();
 // OR
-const parsed = parseAsString(name).orElseGetUndefined()
+const parsed = parseAsString(name).orElseGetUndefined();
 // OR
-const parsed = parseAsString(name).orElseThrowDefault('name')
+const parsed = parseAsString(name).orElseThrowDefault('parsed');
 // OR
-const parsed = parseAsString(name).orElseThrowCustom('this is custom error message')
+const parsed = parseAsString(name).orElseThrowCustom(
+    'this is custom error message'
+);
 ```
 
-`Can I raise an issue?`
+## Additional information
 
-Why not? Feel free to raise an issue if you have a question, an enhancement, or a bug report.
+You can contribute if you want to, just
 
-`How can I contribute?`
+1. Create and commit to a new branch
+2. Write test code
+3. Create a Pull Request
 
-I appreciate that you are even reading this, I am indeed flattered, even more so if you are willing to contribute
-Before you dive in, I'd like to have a few words about contributing.
+**OR**
 
-    Please use TypeScript
-    Write Test Code
+You can raise issue(s) if you prefer that way
 
 ## **_How to use_**
 
@@ -119,3 +119,7 @@ Before you dive in, I'd like to have a few words about contributing.
 OR
 
 `npm i parse-dont-validate`
+
+OR
+
+`pnpm add parse-dont-validate`
