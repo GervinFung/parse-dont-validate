@@ -1,4 +1,4 @@
-import parseAsNumber from '../../src/primitive/parseAsNumber';
+import { parseAsNumber } from '../../src';
 
 describe('Test parse as number positive case', () => {
     test.each([
@@ -71,7 +71,7 @@ describe('Test parse as number negative case, return specified output if not num
     });
 });
 
-describe('Test parse as number in range negative case', () => {
+describe('Test parse as number negative case', () => {
     test.each([
         {
             value: 1.125,

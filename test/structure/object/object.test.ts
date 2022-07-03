@@ -1,8 +1,11 @@
-import parseAsDesiredObject from '../../../src/structure/object/parseAsDesiredObject';
-import parseAsReadonlyArray from '../../../src/structure/array/parseAsReadonlyArray';
-import parseAsString from '../../../src/primitive/parseAsString';
-import parseAsBoolean from '../../../src/primitive/parseAsBoolean';
-import parseAsNumber from '../../../src/primitive/parseAsNumber';
+import {
+    parseAsBoolean,
+    parseAsNumber,
+    parseAsObject,
+    parseAsReadonlyArray,
+    parseAsReadonlyObject,
+    parseAsString,
+} from '../../../src';
 import turnToJsonData from '../util';
 
 describe('Test parse as object positive case', () => {
@@ -44,11 +47,7 @@ describe('Test parse as object positive case', () => {
             },
         },
     ])('data => %p', ({ value, obj, parse }) => {
-        const parseObj = parseAsDesiredObject(
-            turnToJsonData(value),
-            parse,
-            true
-        );
+        const parseObj = parseAsReadonlyObject(turnToJsonData(value), parse);
         expect(parseObj.orElseGetNull()).toEqual(obj);
         expect(parseObj.orElseGetUndefined()).toEqual(obj);
         expect(parseObj.orElseGetEmptyObject()).toEqual(obj);
@@ -94,11 +93,7 @@ describe('Test parse as object negative case', () => {
             },
         },
     ])('data => %p', ({ value, parse }) => {
-        const parseObj = parseAsDesiredObject(
-            turnToJsonData(value),
-            parse,
-            true
-        );
+        const parseObj = parseAsObject(turnToJsonData(value), parse);
         expect(parseObj.orElseGetEmptyObject()).toEqual({});
         expect(parseObj.orElseGetUndefined()).toEqual(undefined);
         expect(parseObj.orElseGetNull()).toEqual(null);
@@ -137,11 +132,7 @@ describe('Test parse as object with mismatch type case', () => {
             },
         },
     ])('data => %p', ({ value, parse }) => {
-        const parseObj = parseAsDesiredObject(
-            turnToJsonData(value),
-            parse,
-            true
-        );
+        const parseObj = parseAsObject(turnToJsonData(value), parse);
         expect(() => parseObj.orElseGetEmptyObject()).toThrowError();
         expect(() => parseObj.orElseGetUndefined()).toThrowError();
         expect(() => parseObj.orElseGetNull()).toThrowError();

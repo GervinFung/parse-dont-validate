@@ -1,18 +1,17 @@
-import parseAsDesiredArray from '../../../src/structure/array/parseAsDesiredArray';
-import parseAsReadonlyArray from '../../../src/structure/array/parseAsReadonlyArray';
-import parseAsArray from '../../../src/structure/array/parseAsArray';
-import parseAsString from '../../../src/primitive/parseAsString';
-import parseAsNumber from '../../../src/primitive/parseAsNumber';
-import parseAsObject from '../../../src/structure/object/parseAsObject';
+import {
+    parseAsArray,
+    parseAsNumber,
+    parseAsReadonlyArray,
+    parseAsReadonlyObject,
+    parseAsString,
+} from '../../../src';
 import turnToJsonData from '../util';
 
-describe('Test parse as desired number array', () => {
-    test('parse as desired number array', () => {
-        const parseArray = parseAsDesiredArray(
+describe('Test parse as mutable number array', () => {
+    test('parse as mutable number array', () => {
+        const parseArray = parseAsArray(
             turnToJsonData([1, 2, 3, 4, 5]),
-            (value: unknown) =>
-                parseAsNumber(value).orElseThrowDefault('value'),
-            true
+            (value) => parseAsNumber(value).orElseThrowDefault('value')
         );
         expect(Array.isArray(parseArray.orElseGet(1))).toEqual(true);
         expect(Array.isArray(parseArray.orElseGet(() => 1))).toEqual(true);
@@ -39,9 +38,9 @@ describe('Test parse as desired number array', () => {
     });
 });
 
-describe('Test parse as desired object array', () => {
-    test('parse as desired object array', () => {
-        const parseArray = parseAsDesiredArray(
+describe('Test parse as readonly object array', () => {
+    test('parse as readonly object array', () => {
+        const parseArray = parseAsReadonlyArray(
             turnToJsonData([
                 {
                     name: 'Wendy',
@@ -70,10 +69,15 @@ describe('Test parse as desired object array', () => {
                     },
                 ],
             ]),
-            (value: any) =>
-                parseAsObject(value, (obj: any) =>
-                    parseAsReadonlyArray(obj, (value: any) =>
-                        parseAsObject(value, (obj: any) => ({
+            (value) =>
+                parseAsReadonlyObject(value, (obj) =>
+                    parseAsReadonlyArray(obj, (obj) => ({
+                        name: parseAsString(obj.name).orElseThrowDefault(
+                            'name'
+                        ),
+                        age: parseAsNumber(obj.age).orElseThrowDefault('age'),
+                    })).orElseLazyGet(() =>
+                        parseAsReadonlyObject(value, (obj) => ({
                             name: parseAsString(obj.name).orElseThrowDefault(
                                 'name'
                             ),
@@ -81,14 +85,8 @@ describe('Test parse as desired object array', () => {
                                 'age'
                             ),
                         })).orElseThrowDefault('obj')
-                    ).orElseLazyGet(() => ({
-                        name: parseAsString(obj.name).orElseThrowDefault(
-                            'name'
-                        ),
-                        age: parseAsNumber(obj.age).orElseThrowDefault('age'),
-                    }))
-                ).orElseThrowDefault('obj'),
-            true
+                    )
+                ).orElseThrowDefault('obj')
         );
         expect(Array.isArray(parseArray.orElseGet(1))).toEqual(true);
         expect(Array.isArray(parseArray.orElseGet(() => 1))).toEqual(true);
@@ -157,13 +155,9 @@ describe('Test parse as desired object array', () => {
 
 describe('Test parse as desired array negative case', () => {
     test('parse as desired array negative case', () => {
-        const parseArray = parseAsDesiredArray(
-            1,
-            (value: any) => {
-                throw new Error(`${value} should not reach here`);
-            },
-            true
-        );
+        const parseArray = parseAsArray(1, (value) => {
+            throw new Error(`${value} should not reach here`);
+        });
         expect(parseArray.orElseGet(1)).toEqual(1);
         expect(
             parseArray.orElseLazyGet(() => ({
@@ -186,23 +180,23 @@ describe('Test parse as desired array negative case', () => {
 describe('Test parse as mutable and readonly array both cases', () => {
     test('parse as mutable and readonly array both cases', () => {
         expect(
-            parseAsReadonlyArray(1, (value: any) => {
+            parseAsReadonlyArray(1, (value) => {
                 throw new Error(`${value} should not reach here`);
             }).orElseGetReadonlyEmptyArray()
         ).toEqual([]);
         expect(
-            parseAsReadonlyArray([1, 2], (value: unknown) =>
+            parseAsReadonlyArray([1, 2], (value) =>
                 parseAsNumber(value).orElseThrowDefault('value')
             ).orElseGetReadonlyEmptyArray().length
         ).toEqual(2);
 
         expect(
-            parseAsArray(1, (value: any) => {
+            parseAsArray(1, (value) => {
                 throw new Error(`${value} should not reach here`);
             }).orElseGetEmptyArray()
         ).toEqual([]);
         expect(
-            parseAsArray([1, 2], (value: unknown) =>
+            parseAsArray([1, 2], (value) =>
                 parseAsNumber(value).orElseThrowDefault('value')
             ).orElseGetEmptyArray().length
         ).toEqual(2);
