@@ -1,6 +1,6 @@
-import parseAsNull from '../../src/primitive/parseAsNull';
+import { parseAsNull } from '../../src';
 
-describe('Test parse as undefined positive case', () => {
+describe('Test parse as null positive case', () => {
     test.each([
         {
             value: null,

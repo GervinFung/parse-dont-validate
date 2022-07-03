@@ -1,4 +1,4 @@
-import parseAsString from '../../src/primitive/parseAsString';
+import { parseAsString } from '../../src';
 
 describe('Test parse as string get empty string', () => {
     test.each([

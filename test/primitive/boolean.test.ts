@@ -1,4 +1,4 @@
-import parseAsBoolean from '../../src/primitive/parseAsBoolean';
+import { parseAsBoolean } from '../../src';
 
 describe('Test parse as boolean positive case', () => {
     test.each([
