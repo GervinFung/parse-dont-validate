@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "incremental": true,
         "allowJs": false,
         "checkJs": false,
         "strict": true,
@@ -15,9 +14,9 @@
         "resolveJsonModule": true,
         "noUncheckedIndexedAccess": true,
         "pretty": true,
+        "emitDeclarationOnly": true,
         "declaration": true,
-        "declarationMap": true,
-        "sourceMap": true
+        "outDir": "build/dts"
     },
     "include": ["src"],
     "exclude": ["node_modules"]
