@@ -1,3 +1,7 @@
+## 2.0.3 (19 July 2022)
+
+-   Improved CommonJs & remove duplicated type definition
+
 ## 2.0.2 (19 July 2022)
 
 -   Added support for CommonJs
