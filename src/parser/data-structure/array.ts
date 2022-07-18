@@ -11,14 +11,12 @@ const parseAsAnArray = <T, A extends ReadonlyArray<T> | Array<T>>(
     map: Map<T>,
     u: unknown,
     isImmutable: boolean
-) => {
-    const expectedType = 'array';
-    return createDataStructureParser<A>({
-        expectedType,
+) =>
+    createDataStructureParser<A>({
+        expectedType: 'array',
         actualType: getActualType(u),
         t: () => freeze(() => (u as Array<any>).map<T>(map) as A, isImmutable),
     });
-};
 
 const orElseGetEmptyArray = <T, A extends ReadonlyArray<T> | Array<T>>(
     map: Map<T>,

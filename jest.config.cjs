@@ -1,4 +1,4 @@
-const config = {
+module.exports = {
     verbose: true,
     transform: {
         '^.+\\.(ts)$': 'ts-jest',
@@ -6,5 +6,3 @@ const config = {
     },
     transformIgnorePatterns: [],
 };
-
-export default config;
