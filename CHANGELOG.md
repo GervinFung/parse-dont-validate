@@ -1,8 +1,12 @@
+## 2.0.2 (19 July 2022)
+
+-   Added support for CommonJs
+
 ## 2.0.1 (18 Jun 2022)
 
 -   Removed parser for `map` and `set` as it cannot be stringified by JSON (really forgot about it)
 
-## 2.0.0 (1 July 2022)
+## 2.0.0 (1 June 2022)
 
 -   Removed parser for `bigint`, `Symbol`, `undefined` and `function` as it cannot be stringified by JSON
 -   Removed unused dependencies
