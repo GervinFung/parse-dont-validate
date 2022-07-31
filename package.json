@@ -8,7 +8,8 @@
     "types": "build/dts/index.d.ts",
     "react-native": "build/mjs/index.js",
     "denoify": {
-        "index": "src/index.ts"
+        "index": "src/index.ts",
+        "out": "dist"
     },
     "exports": {
         "./package.json": "./package.json",
@@ -24,7 +25,7 @@
         "build-mjs": "tsc -p tsconfig.mjs.json && ts-add-js-extension add --dir=build",
         "build-cjs": "tsc -p tsconfig.cjs.json",
         "build-dts": "tsc -p tsconfig.json",
-        "build-deno": "denoify -o dist",
+        "build-deno": "denoify",
         "build": "rm -rf build && yarn build-dts && yarn build-cjs && yarn build-mjs && node script/package.js && yarn build-deno",
         "pretest": "esbuild test/index.ts --bundle --minify --target=node16.3.1 --platform=node --outfile=__tests__/index.test.js",
         "test": "jest -i __tests__"
