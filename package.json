@@ -1,7 +1,7 @@
 {
     "name": "parse-dont-validate",
     "description": "Verify the integrity of the data and return it in expected shape. Otherwise throw error or return a specified default value",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "license": "MIT",
     "main": "build/cjs/index.js",
     "module": "build/mjs/index.js",
@@ -23,9 +23,7 @@
         "build-dts": "tsc -p tsconfig.json",
         "build": "rm -rf build && yarn build-dts && yarn build-cjs && yarn build-mjs && node script/package.js",
         "pretest": "esbuild test/index.ts --bundle --minify --target=node16.3.1 --platform=node --outfile=__tests__/index.test.js",
-        "test": "jest -i __tests__",
-        "typecheck": "tsc -p tsconfig.json --noEmit",
-        "code-cov": "yarn test --coverage --coverageDirectory='coverage'"
+        "test": "jest -i __tests__"
     },
     "bugs": "https://github.com/P-YNPM/parse-dont-validate/issues",
     "repository": {
@@ -48,6 +46,8 @@
         "parse variable",
         "validate",
         "don't validate",
-        "parse, don't validate"
+        "parse, don't validate",
+        "validate json",
+        "run time typecheck"
     ]
 }
