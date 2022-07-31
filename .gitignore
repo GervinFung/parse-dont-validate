@@ -1,6 +1,7 @@
 node_modules
 # production
 build
+dist
 # testing
 coverage
 __tests__

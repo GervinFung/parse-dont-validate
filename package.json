@@ -7,6 +7,9 @@
     "module": "build/mjs/index.js",
     "types": "build/dts/index.d.ts",
     "react-native": "build/mjs/index.js",
+    "denoify": {
+        "index": "src/index.ts"
+    },
     "exports": {
         "./package.json": "./package.json",
         ".": {
@@ -21,7 +24,8 @@
         "build-mjs": "tsc -p tsconfig.mjs.json && ts-add-js-extension add --dir=build",
         "build-cjs": "tsc -p tsconfig.cjs.json",
         "build-dts": "tsc -p tsconfig.json",
-        "build": "rm -rf build && yarn build-dts && yarn build-cjs && yarn build-mjs && node script/package.js",
+        "build-deno": "denoify -o dist",
+        "build": "rm -rf build && yarn build-dts && yarn build-cjs && yarn build-mjs && node script/package.js && yarn build-deno",
         "pretest": "esbuild test/index.ts --bundle --minify --target=node16.3.1 --platform=node --outfile=__tests__/index.test.js",
         "test": "jest -i __tests__"
     },
@@ -36,6 +40,7 @@
     "devDependencies": {
         "@types/jest": "^27.0.2",
         "@types/node": "^16.11.10",
+        "denoify": "^0.11.6",
         "esbuild": "^0.14.51",
         "jest": "27.3.1",
         "ts-add-js-extension": "^1.2.0",
