@@ -9,12 +9,8 @@ const customParserTest = () => {
                 s,
                 (value) => value === '' || value === ' '
             );
-            expect(custom.orElseGetNull()).toBe(s);
-            expect(custom.orElseGetUndefined()).toBe(s);
-            expect(custom.orElseLazyGet(() => null)).toBe(s);
-            expect(custom.orElseGet(null)).toBe(s);
-            expect(custom.orElseThrowDefault('s')).toBe(s);
-            expect(custom.orElseThrowCustom('s is not Specified')).toBe(s);
+            expect(custom.elseGet(null)).toBe(s);
+            expect(custom.elseThrow('s')).toBe(s);
         });
     });
 
@@ -26,14 +22,8 @@ const customParserTest = () => {
                 s,
                 (value) => value === '' || value === ' '
             );
-            expect(custom.orElseGetNull()).toBe(null);
-            expect(custom.orElseGetUndefined()).toBe(undefined);
-            expect(custom.orElseLazyGet(() => null)).toBe(null);
-            expect(custom.orElseGet(null)).toBe(null);
-            expect(() => custom.orElseThrowDefault('s')).toThrowError();
-            expect(() =>
-                custom.orElseThrowCustom('s is not Specified')
-            ).toThrowError();
+            expect(custom.elseGet(null)).toBe(null);
+            expect(() => custom.elseThrow('s')).toThrowError();
         });
     });
 };

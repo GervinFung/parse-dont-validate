@@ -12,28 +12,17 @@ const arrayParserTest = () => {
         test('parse as mutable number array', () => {
             const parseArray = parseAsArray(
                 turnToJsonData([1, 2, 3, 4, 5]),
-                (value) => parseAsNumber(value).orElseThrowDefault('value')
+                (value) => parseAsNumber(value).elseThrow('value')
             );
-            expect(Array.isArray(parseArray.orElseGet(1))).toEqual(true);
-            expect(Array.isArray(parseArray.orElseGet(() => 1))).toEqual(true);
+            expect(Array.isArray(parseArray.elseGet(1))).toEqual(true);
             expect(
                 parseArray
-                    .orElseGetNull()
-                    ?.every((val) => typeof val === 'number') ?? false
-            ).toEqual(true);
-            expect(
-                parseArray
-                    .orElseGetUndefined()
-                    ?.every((val) => typeof val === 'number') ?? false
-            ).toEqual(true);
-            expect(
-                parseArray
-                    .orElseThrowDefault('arr')
+                    .elseThrow('arr')
                     .every((val) => typeof val === 'number')
             ).toEqual(true);
             expect(
                 parseArray
-                    .orElseThrowCustom('not possible')
+                    .elseThrow('not possible')
                     .every((val) => typeof val === 'number')
             ).toEqual(true);
         });
@@ -72,61 +61,23 @@ const arrayParserTest = () => {
                 ]),
                 (value) =>
                     parseAsReadonlyObject(value, (obj) =>
-                        parseAsReadonlyArray(obj, (obj) => ({
-                            name: parseAsString(obj.name).orElseThrowDefault(
-                                'name'
-                            ),
-                            age: parseAsNumber(obj.age).orElseThrowDefault(
-                                'age'
-                            ),
-                        })).orElseLazyGet(() =>
+                        parseAsReadonlyArray(obj, (obj) =>
+                            parseAsReadonlyObject(obj, (obj) => ({
+                                name: parseAsString(obj.name).elseThrow('name'),
+                                age: parseAsNumber(obj.age).elseThrow('age'),
+                            })).elseThrow('obj')
+                        ).elseLazyGet(() =>
                             parseAsReadonlyObject(value, (obj) => ({
-                                name: parseAsString(
-                                    obj.name
-                                ).orElseThrowDefault('name'),
-                                age: parseAsNumber(obj.age).orElseThrowDefault(
-                                    'age'
+                                name: parseAsString(obj.name).elseThrow(
+                                    'hihi name'
                                 ),
-                            })).orElseThrowDefault('obj')
+                                age: parseAsNumber(obj.age).elseThrow('age'),
+                            })).elseThrow('obj')
                         )
-                    ).orElseThrowDefault('obj')
+                    ).elseThrow('obj')
             );
-            expect(Array.isArray(parseArray.orElseGet(1))).toEqual(true);
-            expect(Array.isArray(parseArray.orElseGet(() => 1))).toEqual(true);
             expect(
-                parseArray.orElseGetNull()?.every((val) => {
-                    if (Array.isArray(val)) {
-                        return val.every(
-                            ({ name, age }) =>
-                                typeof name === 'string' &&
-                                typeof age === 'number'
-                        );
-                    }
-                    const { name, age } = val as {
-                        name: string;
-                        age: number;
-                    };
-                    return typeof name === 'string' && typeof age === 'number';
-                }) ?? false
-            ).toEqual(true);
-            expect(
-                parseArray.orElseGetUndefined()?.every((val) => {
-                    if (Array.isArray(val)) {
-                        return val.every(
-                            ({ name, age }) =>
-                                typeof name === 'string' &&
-                                typeof age === 'number'
-                        );
-                    }
-                    const { name, age } = val as {
-                        name: string;
-                        age: number;
-                    };
-                    return typeof name === 'string' && typeof age === 'number';
-                }) ?? false
-            ).toEqual(true);
-            expect(
-                parseArray.orElseThrowDefault('val').every((val) => {
+                parseArray.elseThrow('val').every((val) => {
                     if (Array.isArray(val)) {
                         return val.every(
                             ({ name, age }) =>
@@ -142,24 +93,20 @@ const arrayParserTest = () => {
                 })
             ).toEqual(true);
             expect(
-                parseArray
-                    .orElseThrowCustom('impossible to throw')
-                    .every((val) => {
-                        if (Array.isArray(val)) {
-                            return val.every(
-                                ({ name, age }) =>
-                                    typeof name === 'string' &&
-                                    typeof age === 'number'
-                            );
-                        }
-                        const { name, age } = val as {
-                            name: string;
-                            age: number;
-                        };
-                        return (
-                            typeof name === 'string' && typeof age === 'number'
+                parseArray.elseThrow('impossible to throw').every((val) => {
+                    if (Array.isArray(val)) {
+                        return val.every(
+                            ({ name, age }) =>
+                                typeof name === 'string' &&
+                                typeof age === 'number'
                         );
-                    })
+                    }
+                    const { name, age } = val as {
+                        name: string;
+                        age: number;
+                    };
+                    return typeof name === 'string' && typeof age === 'number';
+                })
             ).toEqual(true);
         });
     });
@@ -169,22 +116,9 @@ const arrayParserTest = () => {
             const parseArray = parseAsArray(1, (value) => {
                 throw new Error(`${value} should not reach here`);
             });
-            expect(parseArray.orElseGet(1)).toEqual(1);
-            expect(
-                parseArray.orElseLazyGet(() => ({
-                    name: 'Yo',
-                    age: 1999,
-                }))
-            ).toEqual({
-                name: 'Yo',
-                age: 1999,
-            });
-            expect(parseArray.orElseGetNull()).toEqual(null);
-            expect(parseArray.orElseGetUndefined()).toEqual(undefined);
-            expect(() => parseArray.orElseThrowDefault('arr')).toThrowError();
-            expect(() =>
-                parseArray.orElseThrowCustom('not possible')
-            ).toThrowError();
+            expect(parseArray.elseGet(1)).toEqual(1);
+            expect(() => parseArray.elseThrow('arr')).toThrowError();
+            expect(() => parseArray.elseThrow('not possible')).toThrowError();
         });
     });
 
@@ -193,23 +127,23 @@ const arrayParserTest = () => {
             expect(
                 parseAsReadonlyArray(1, (value) => {
                     throw new Error(`${value} should not reach here`);
-                }).orElseGetReadonlyEmptyArray()
+                }).elseGet([])
             ).toEqual([]);
             expect(
                 parseAsReadonlyArray([1, 2], (value) =>
-                    parseAsNumber(value).orElseThrowDefault('value')
-                ).orElseGetReadonlyEmptyArray().length
+                    parseAsNumber(value).elseThrow('value')
+                ).elseGet([]).length
             ).toEqual(2);
 
             expect(
                 parseAsArray(1, (value) => {
                     throw new Error(`${value} should not reach here`);
-                }).orElseGetEmptyArray()
+                }).elseGet([])
             ).toEqual([]);
             expect(
                 parseAsArray([1, 2], (value) =>
-                    parseAsNumber(value).orElseThrowDefault('value')
-                ).orElseGetEmptyArray().length
+                    parseAsNumber(value).elseThrow('value')
+                ).elseGet([]).length
             ).toEqual(2);
         });
     });

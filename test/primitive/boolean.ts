@@ -11,12 +11,9 @@ const booleanParserTest = () => {
             } as const,
         ])('data => %p', ({ value }) => {
             const parseBoolean = parseAsBoolean(value);
-            expect(parseBoolean.orElseGetTrue()).toEqual(value);
-            expect(parseBoolean.orElseGetFalse()).toEqual(value);
-
-            const exactly = parseBoolean.exactlyAs(value);
-            expect(exactly.orElseGetFalse()).toEqual(value);
-            expect(exactly.orElseGetTrue()).toEqual(value);
+            expect(parseBoolean.elseGet(true)).toEqual(value);
+            expect(parseBoolean.elseGet(false)).toEqual(value);
+            expect(parseBoolean.elseLazyGet(() => false)).toEqual(value);
         });
     });
 
@@ -36,12 +33,9 @@ const booleanParserTest = () => {
             },
         ])('data => %p', ({ value }) => {
             const parseBoolean = parseAsBoolean(value);
-            expect(parseBoolean.orElseGetTrue()).toEqual(true);
-            expect(parseBoolean.orElseGetFalse()).toEqual(false);
-
-            const exactly = parseBoolean.exactlyAs(true);
-            expect(exactly.orElseGetFalse()).toEqual(false);
-            expect(exactly.orElseGetTrue()).toEqual(true);
+            expect(parseBoolean.elseGet(true)).toEqual(true);
+            expect(parseBoolean.elseGet(false)).toEqual(false);
+            expect(parseBoolean.elseLazyGet(() => false)).toEqual(false);
         });
     });
 };
