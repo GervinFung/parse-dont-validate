@@ -1,3 +1,8 @@
+## 3.0.0 (9 Oct 2022)
+
+-   (Feat) Each validation method will only return `elseGet(t: T)` and `elseThrow(message: string)` for simplicity and improvement of overall execution speed
+-   (Feat) Number parser will also return an additional object, `inRangeOf`, which in turn return validation method specified above
+
 ## 2.0.4 (31 July 2022)
 
 -   (Fix) Automate addtion of `.js` extension for mjs export

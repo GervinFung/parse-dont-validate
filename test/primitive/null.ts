@@ -7,7 +7,7 @@ const nullParserTest = () => {
                 value: null,
             },
         ])('data => %p', ({ value }) =>
-            expect(parseAsNull(value).orElseGetUndefined()).toEqual(value)
+            expect(parseAsNull(value).elseGet(undefined)).toEqual(value)
         );
     });
 
@@ -24,9 +24,7 @@ const nullParserTest = () => {
                 alternative: '',
             },
         ])('data => %p', ({ value, alternative }) =>
-            expect(parseAsNull(value).orElseGet(alternative)).toEqual(
-                alternative
-            )
+            expect(parseAsNull(value).elseGet(alternative)).toEqual(alternative)
         );
     });
 };

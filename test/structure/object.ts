@@ -16,8 +16,8 @@ const objectParserTest = () => {
                 obj: [1, 2, 3, 4, 5, 6] as const,
                 parse: (obj: any): any =>
                     parseAsReadonlyArray(obj, (o) =>
-                        parseAsNumber(o).orElseThrowDefault('o')
-                    ).orElseLazyGet(() => []),
+                        parseAsNumber(o).elseThrow('o')
+                    ).elseGet([]),
             },
             {
                 value: {
@@ -31,15 +31,9 @@ const objectParserTest = () => {
                     age: true,
                 } as const,
                 parse: (obj: any): any => {
-                    const x = parseAsNumber(obj.x)
-                        .exactlyAs(123)
-                        .orElseThrowDefault('x');
-                    const name = parseAsString(obj.name)
-                        .exactlyAs('string')
-                        .orElseThrowDefault('name');
-                    const age = parseAsBoolean(obj.age)
-                        .exactlyAs(true)
-                        .orElseThrowDefault('age');
+                    const x = parseAsNumber(obj.x).elseThrow('x');
+                    const name = parseAsString(obj.name).elseThrow('name');
+                    const age = parseAsBoolean(obj.age).elseThrow('age');
                     return {
                         x,
                         name,
@@ -52,21 +46,8 @@ const objectParserTest = () => {
                 turnToJsonData(value),
                 parse
             );
-            expect(parseObj.orElseGetNull()).toEqual(obj);
-            expect(parseObj.orElseGetUndefined()).toEqual(obj);
-            expect(parseObj.orElseGetEmptyObject()).toEqual(obj);
-            expect(
-                parseObj.orElseGet({
-                    name: 'Dont',
-                })
-            ).toEqual(obj);
-            expect(
-                parseObj.orElseLazyGet(() => ({
-                    name: 'Dont',
-                }))
-            ).toEqual(obj);
-            expect(parseObj.orElseThrowDefault('value')).toEqual(obj);
-            expect(parseObj.orElseThrowCustom('value')).toEqual(obj);
+            expect(parseObj.elseGet(null)).toEqual(obj);
+            expect(parseObj.elseThrow('value')).toEqual(obj);
         });
     });
 
@@ -98,25 +79,9 @@ const objectParserTest = () => {
             },
         ])('data => %p', ({ value, parse }) => {
             const parseObj = parseAsObject(turnToJsonData(value), parse);
-            expect(parseObj.orElseGetEmptyObject()).toEqual({});
-            expect(parseObj.orElseGetUndefined()).toEqual(undefined);
-            expect(parseObj.orElseGetNull()).toEqual(null);
-            expect(
-                parseObj.orElseGet({
-                    name: 'Dont',
-                })
-            ).toEqual({
-                name: 'Dont',
-            });
-            expect(
-                parseObj.orElseLazyGet(() => ({
-                    name: 'Dont',
-                }))
-            ).toEqual({
-                name: 'Dont',
-            });
-            expect(() => parseObj.orElseThrowDefault('value')).toThrowError();
-            expect(() => parseObj.orElseThrowCustom('value')).toThrowError();
+            expect(parseObj.elseGet(null)).toEqual(null);
+            expect(parseObj.elseLazyGet(() => undefined)).toEqual(undefined);
+            expect(() => parseObj.elseThrow('value')).toThrowError();
         });
     });
 
@@ -126,32 +91,14 @@ const objectParserTest = () => {
                 value: {
                     x: 123,
                 } as const,
-                parse: (obj: any) => {
-                    const x = parseAsNumber(obj.x)
-                        .exactlyAs(431)
-                        .orElseThrowDefault('x');
-                    return {
-                        x,
-                    };
-                },
+                parse: (obj: any) => ({
+                    x: parseAsNumber(obj.x).inRangeOf(124, 1234).elseThrow('x'),
+                }),
             },
         ])('data => %p', ({ value, parse }) => {
             const parseObj = parseAsObject(turnToJsonData(value), parse);
-            expect(() => parseObj.orElseGetEmptyObject()).toThrowError();
-            expect(() => parseObj.orElseGetUndefined()).toThrowError();
-            expect(() => parseObj.orElseGetNull()).toThrowError();
-            expect(() =>
-                parseObj.orElseGet({
-                    name: 'Dont',
-                })
-            ).toThrowError();
-            expect(() =>
-                parseObj.orElseLazyGet(() => ({
-                    name: 'Dont',
-                }))
-            ).toThrowError();
-            expect(() => parseObj.orElseThrowDefault('value')).toThrowError();
-            expect(() => parseObj.orElseThrowCustom('value')).toThrowError();
+            expect(() => parseObj.elseGet(null)).toThrowError();
+            expect(() => parseObj.elseThrow('value')).toThrowError();
         });
     });
 };

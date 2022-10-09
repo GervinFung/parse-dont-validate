@@ -8,7 +8,6 @@ type Params<T> = Readonly<{
 
 const createPrimitiveParser = <T>({
     t,
-    expectedType,
     isMatchingType,
 }: Params<unknown> &
     Readonly<{
@@ -16,7 +15,6 @@ const createPrimitiveParser = <T>({
     }>) =>
     createOptions({
         t: () => t as T,
-        expectedType,
         isMatchingType,
     });
 
@@ -26,11 +24,13 @@ const createDataStructureParser = <T>({
     actualType,
 }: Params<ParameterlessLazyLoad<T>> &
     Readonly<{
+        expectedType: PossibleSelfDefinedType;
+    }> &
+    Readonly<{
         actualType: PossibleSelfDefinedType;
     }>) =>
     createOptions({
         t,
-        expectedType,
         isMatchingType: () => actualType === expectedType,
     });
 
