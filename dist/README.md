@@ -63,19 +63,15 @@ Instead of just validating and return true false, the type information is passed
 
 In general, once a parsing function like `parseAsBoolean(true)` for example is called, it returns an Options object that generally contains the following functions
 
-1. `orElseLazyGet(callback function to return alternative value for lazy loading purpose)`
-2. `orElseGet(alternative value that will be computed immediately)`
-3. `orElseGetUndefined()`
-4. `orElseGetNull()`
-5. `orElseThrowDefault(variable name)`
-6. `orElseThrowCustom(custom message)`
+1. `elseGet(alternative value)`
+2. `elseThrow(custom message)`
 
 For data structure such as array and object, the second parameter will be a callback function which you write your parsing for each element in the array. See the code below
 
 ```ts
 const parseArray = parseAsReadonlyArray(
-    [1, 2, 3, 4, 5], (value => parseAsNumber(value).orElseThrowDefault('value')
-).orElseGetReadonlyEmptyArray();
+    [1, 2, 3, 4, 5], (value => parseAsNumber(value).elseThrow('whatever')
+).elseGet([]);
 ```
 
 ### How do I use it?
@@ -85,19 +81,8 @@ import { parseAsString } from 'parse-dont-validate';
 
 const name = '123'; //assume we don't know it's string
 
-const parsed = parseAsString(name).orElseGet('123');
-// OR
-const parsed = parseAsString(name).orElseLazyGet(() => '123');
-// OR
-const parsed = parseAsString(name).orElseGetNull();
-// OR
-const parsed = parseAsString(name).orElseGetUndefined();
-// OR
-const parsed = parseAsString(name).orElseThrowDefault('parsed');
-// OR
-const parsed = parseAsString(name).orElseThrowCustom(
-    'this is custom error message'
-);
+const parsed = parseAsString(name).elseGet('123');
+const parsed = parseAsString(name).elseThrow('this is custom error message');
 ```
 
 ## Additional information
