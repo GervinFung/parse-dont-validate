@@ -3,7 +3,7 @@ import { ParameterlessLazyLoad } from '../types';
 
 type Options<T> = Readonly<{
     elseGet: <U>(u: U) => U | T;
-    elseLazyGet: <A, U extends () => A>(u: U) => A | T;
+    elseLazyGet: <A>(u: () => A) => A | T;
     elseThrow: (message: string) => T;
 }>;
 

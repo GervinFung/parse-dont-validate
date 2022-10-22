@@ -1,3 +1,7 @@
+## 3.0.1 (23 Oct 2022)
+
+-   (Fix) Infer `elseLazyGet`
+
 ## 3.0.0 (9 Oct 2022)
 
 -   (Feat) Each validation method will only return `elseGet(t: T)` and `elseThrow(message: string)` for simplicity and improvement of overall execution speed
