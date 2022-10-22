@@ -3,5 +3,5 @@ export default class ParseError extends Error {
         super(message);
     }
 
-    static new = (message: string) => new this(message);
+    static fromMessage = (message: string) => new this(message);
 }

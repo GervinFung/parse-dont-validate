@@ -1,21 +1,16 @@
 import ParserError from '../../error';
 
-type Value = unknown;
-
 type Throw = Readonly<{
-    value: Value;
     message: string;
     ifParsingFailThen: 'throw';
 }>;
 
 type Get<T> = Readonly<{
-    value: Value;
     alternativeValue: T;
     ifParsingFailThen: 'get';
 }>;
 
 type LazyGet<T> = Readonly<{
-    value: Value;
     alternativeValue: () => T;
     ifParsingFailThen: 'lazy-get';
 }>;
@@ -29,7 +24,7 @@ const determineAction = <T>(b: Action<T>) => {
         case 'lazy-get':
             return b.alternativeValue();
         case 'throw':
-            throw ParserError.new(b.message);
+            throw ParserError.fromMessage(b.message);
     }
 };
 

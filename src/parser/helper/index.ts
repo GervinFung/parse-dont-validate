@@ -22,6 +22,6 @@ const isInRangeOf = ({
 }: RangeOf &
     Readonly<{
         value: number;
-    }>): boolean => value >= min && value <= max;
+    }>) => value >= min && value <= max;
 
 export { RangeOf, inRangeOf, isInRangeOf };

@@ -1,10 +1,29 @@
-import { CustomPredicate, parseAsCustom } from '../function/custom';
-import Parser from './abstract';
+import Parser from '../class/abstract';
 
-export default class CustomParser<C extends any> extends Parser<C> {
+import {
+    Action,
+    determineAction,
+    Get,
+    LazyGet,
+    Throw,
+} from '../function/action';
+
+type CustomPredicate = Readonly<{
+    value: any;
+    predicate: (a: any) => boolean;
+}>;
+
+function parseAsCustom<C>(options: Throw & CustomPredicate): C;
+function parseAsCustom<C, T>(p: Get<T> & CustomPredicate): T | C;
+function parseAsCustom<C, T>(p: LazyGet<T> & CustomPredicate): T | C;
+function parseAsCustom<C, T>(b: Action<T> & CustomPredicate): T | C {
+    return b.predicate(b.value) ? b.value : determineAction(b);
+}
+
+class CustomParser<C = any> extends Parser<C> {
     constructor(
         value: any,
-        private readonly predicate: CustomPredicate<C>['predicate']
+        private readonly predicate: CustomPredicate['predicate']
     ) {
         super(value);
     }
@@ -33,3 +52,5 @@ export default class CustomParser<C extends any> extends Parser<C> {
             ifParsingFailThen: 'throw',
         });
 }
+
+export { parseAsCustom, CustomParser };
