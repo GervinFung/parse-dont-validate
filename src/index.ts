@@ -1,2 +1,2 @@
-export * from './parser/primitive';
-export * from './parser/data-structure';
+export * from './parser/class';
+export * from './parser/function';

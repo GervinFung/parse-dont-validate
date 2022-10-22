@@ -1,16 +1,21 @@
 import booleanParserTest from './primitive/boolean';
-import nullParserTest from './primitive/null';
+import nullParserTest from './structure/null';
 import numberParserTest from './primitive/number';
 import stringParserTest from './primitive/string';
 import arrayParserTest from './structure/array';
 import customParserTest from './structure/custom';
 import objectParserTest from './structure/object';
 
-booleanParserTest();
-nullParserTest();
-numberParserTest();
-stringParserTest();
+import testCases from 'cases-of-test';
 
-arrayParserTest();
-customParserTest();
-objectParserTest();
+testCases({
+    tests: [
+        [booleanParserTest],
+        [nullParserTest],
+        [numberParserTest],
+        [stringParserTest],
+        [arrayParserTest],
+        [customParserTest],
+        [objectParserTest],
+    ],
+});
