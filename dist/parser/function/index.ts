@@ -1,21 +1,10 @@
-import {
-    parseAsNull,
-    FunctionArrayParser,
-    FunctionObjectParser,
-} from './structure.ts';
-
-const parseAsMutableArray = FunctionArrayParser.mutable;
-const parseAsReadonlyArray = FunctionArrayParser.immutable;
-
-const parseAsMutableObject = FunctionObjectParser.immutable;
-const parseAsReadonlyObject = FunctionObjectParser.mutable;
-
-export * from './custom.ts';
-export * from './primitive.ts';
+export { parseAsString } from '../primitive/string.ts';
+export { parseAsNumber } from '../primitive/number.ts';
+export { parseAsBoolean } from '../primitive/boolean.ts';
+export { parseAsNull } from '../structure/null.ts';
+export { parseAsCustom } from '../custom/index.ts';
+export { parseAsMutableArray, parseAsReadonlyArray } from '../structure/array.ts';
 export {
-    parseAsNull,
-    parseAsMutableArray,
-    parseAsReadonlyArray,
-    parseAsReadonlyObject,
     parseAsMutableObject,
-};
+    parseAsReadonlyObject,
+} from '../structure/object.ts';

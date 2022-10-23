@@ -1,23 +1,49 @@
-import ParseError from '../../error/index.ts';
-import Parser from '../abstract.ts';
+import Parser from '../class/abstract.ts';
+import {
+    Action,
+    determineAction,
+    Get,
+    LazyGet,
+    Throw,
+} from '../function/action.ts';
 
 type B = boolean;
 
-export default class BooleanParser extends Parser<B> {
+type BooleanOptions = Readonly<{
+    boolean: unknown;
+}>;
+function parseAsBoolean(options: Throw & BooleanOptions): B;
+function parseAsBoolean<T>(p: Get<T> & BooleanOptions): T | B;
+function parseAsBoolean<T>(p: LazyGet<T> & BooleanOptions): T | B;
+function parseAsBoolean<T>(b: Action<T> & BooleanOptions): T | B {
+    return typeof b.boolean === 'boolean' ? b.boolean : determineAction(b);
+}
+
+class BooleanParser extends Parser<B> {
     constructor(value: unknown) {
         super(value);
     }
 
-    elseGet = <A>(a: A): B | A =>
-        typeof this.value !== 'boolean' ? a : this.value;
+    elseGet = <A>(alternativeValue: A): B | A =>
+        parseAsBoolean({
+            alternativeValue,
+            boolean: this.value,
+            ifParsingFailThen: 'get',
+        });
 
-    elseLazyGet = <A>(a: () => A): B | A =>
-        typeof this.value !== 'boolean' ? a() : this.value;
+    elseLazyGet = <A>(alternativeValue: () => A): B | A =>
+        parseAsBoolean({
+            alternativeValue,
+            boolean: this.value,
+            ifParsingFailThen: 'lazy-get',
+        });
 
-    elseThrow = (message: string): B => {
-        if (typeof this.value === 'boolean') {
-            return this.value;
-        }
-        throw ParseError.new(message);
-    };
+    elseThrow = (message: string): B =>
+        parseAsBoolean({
+            message,
+            boolean: this.value,
+            ifParsingFailThen: 'throw',
+        });
 }
+
+export { BooleanParser, parseAsBoolean };

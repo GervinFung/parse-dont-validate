@@ -1,42 +1,38 @@
-import * as Primitive from './primitive.ts';
-import * as Structure from './structure.ts';
-import Custom from './custom.ts';
+import { StringParser } from '../primitive/string.ts';
+import { NumberParser } from '../primitive/number.ts';
+import { BooleanParser } from '../primitive/boolean.ts';
+import { CustomParser } from '../custom/index.ts';
+import { NullParser } from '../structure/null.ts';
+import { MutableArrayParser, ReadonlyArrayParser } from '../structure/array.ts';
+import { MutableObjectParser, ReadonlyObjectParser } from '../structure/object.ts';
 
 class Parser {
     constructor(private readonly value: unknown) {}
 
-    asString = () => new Primitive.StringParser(this.value);
+    asString = () => new StringParser(this.value);
 
-    asNumber = () => new Primitive.NumberParser(this.value);
+    asNumber = () => new NumberParser(this.value);
 
-    asBoolean = () => new Primitive.BooleanParser(this.value);
+    asBoolean = () => new BooleanParser(this.value);
 
-    asNull = () => new Structure.NullParser(this.value);
+    asNull = () => new NullParser(this.value);
 
-    asCustom = (predicate: ConstructorParameters<typeof Custom>[1]) =>
-        new Custom(this.value, predicate);
+    asCustom = <C>(predicate: ConstructorParameters<typeof CustomParser>[1]) =>
+        new CustomParser<C>(this.value, predicate);
 
     asMutableArray = (
-        parseElement: ConstructorParameters<
-            typeof Structure.ClassArrayParser.Mutable
-        >[1]
-    ) => new Structure.ClassArrayParser.Mutable(this.value, parseElement);
+        parseElement: ConstructorParameters<typeof MutableArrayParser>[1]
+    ) => new MutableArrayParser(this.value, parseElement);
     asReadonlyArray = (
-        parseElement: ConstructorParameters<
-            typeof Structure.ClassArrayParser.Immutable
-        >[1]
-    ) => new Structure.ClassArrayParser.Immutable(this.value, parseElement);
+        parseElement: ConstructorParameters<typeof ReadonlyArrayParser>[1]
+    ) => new ReadonlyArrayParser(this.value, parseElement);
 
     asMutableObject = (
-        parse: ConstructorParameters<
-            typeof Structure.ClassObjectParser.Mutable
-        >[1]
-    ) => new Structure.ClassObjectParser.Mutable(this.value, parse);
+        parse: ConstructorParameters<typeof MutableObjectParser>[1]
+    ) => new MutableObjectParser(this.value, parse);
     asReadonlyObject = (
-        parse: ConstructorParameters<
-            typeof Structure.ClassObjectParser.Immutable
-        >[1]
-    ) => new Structure.ClassObjectParser.Immutable(this.value, parse);
+        parse: ConstructorParameters<typeof ReadonlyObjectParser>[1]
+    ) => new ReadonlyObjectParser(this.value, parse);
 }
 
 const parse = (value: ConstructorParameters<typeof Parser>[0]) =>

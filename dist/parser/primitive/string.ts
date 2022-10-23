@@ -1,10 +1,37 @@
-import ParseError from '../../error/index.ts';
-import Parser from '../abstract.ts';
-import { inRangeOf, RangeOf } from '../helper/index.ts';
+import Parser from '../class/abstract.ts';
+import {
+    Action,
+    determineAction,
+    Get,
+    LazyGet,
+    Throw,
+} from '../function/action.ts';
+import { inRangeOf, isInRangeOf, RangeOf } from '../helper/index.ts';
 
 type S = string;
 
-export default class StringParser extends Parser<S> {
+type StringOptions = Readonly<{
+    string: unknown;
+    numberOfCharactersInRangeOf?: RangeOf;
+}>;
+function parseAsString(options: Throw & StringOptions): S;
+function parseAsString<T>(p: (Get<T> | LazyGet<T>) & StringOptions): T | S;
+function parseAsString<T>(b: Action<T> & StringOptions): T | S {
+    if (typeof b.string !== 'string') {
+        return determineAction(b);
+    }
+    if (!b.numberOfCharactersInRangeOf) {
+        return b.string;
+    }
+    return isInRangeOf({
+        ...inRangeOf(b.numberOfCharactersInRangeOf),
+        value: b.string.length,
+    })
+        ? b.string
+        : determineAction(b);
+}
+
+class StringParser extends Parser<S> {
     private range:
         | undefined
         | Readonly<{
@@ -21,38 +48,29 @@ export default class StringParser extends Parser<S> {
         return this;
     };
 
-    elseThrow = (message: string): S => {
-        if (typeof this.value === 'string') {
-            return this.value;
-        }
-        throw ParseError.new(message);
-    };
+    elseThrow = (message: string): S =>
+        parseAsString({
+            message,
+            string: this.value,
+            ifParsingFailThen: 'throw',
+            numberOfCharactersInRangeOf: this.range,
+        });
 
-    elseGet = <A>(a: A): S | A => {
-        if (typeof this.value !== 'string') {
-            return a;
-        }
-        const { value: string } = this;
-        if (!this.range) {
-            return string;
-        }
-        const { length } = string;
-        return !(length >= this.range.min && length <= this.range.max)
-            ? a
-            : string;
-    };
+    elseGet = <A>(alternativeValue: A): S | A =>
+        parseAsString({
+            alternativeValue,
+            string: this.value,
+            ifParsingFailThen: 'get',
+            numberOfCharactersInRangeOf: this.range,
+        });
 
-    elseLazyGet = <A>(a: () => A): S | A => {
-        if (typeof this.value !== 'string') {
-            return a();
-        }
-        const { value: string } = this;
-        if (!this.range) {
-            return string;
-        }
-        const { length } = string;
-        return !(length >= this.range.min && length <= this.range.max)
-            ? a()
-            : string;
-    };
+    elseLazyGet = <A>(alternativeValue: () => A): S | A =>
+        parseAsString({
+            alternativeValue,
+            string: this.value,
+            ifParsingFailThen: 'lazy-get',
+            numberOfCharactersInRangeOf: this.range,
+        });
 }
+
+export { StringParser, parseAsString };

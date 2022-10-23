@@ -1,13 +1,16 @@
 import { parseAsMutableArray, parseAsReadonlyArray } from '../../../src';
 import parse from '../../../src/parser/class';
+import turnToJsonData from '../../util';
 
 const testArrayParser = () =>
     describe('Array parser', () => {
         it.each(['string', 'number'] as const)(
             'should be able to parse "%s" array as it is really an array',
             (type) => {
-                const array = Array.from({ length: 5 }, (_, index) =>
-                    type === 'number' ? index : `${index}`
+                const array = turnToJsonData(
+                    Array.from({ length: 5 }, (_, index) =>
+                        type === 'number' ? index : `${index}`
+                    )
                 );
 
                 const parseElement = (element: any) =>
@@ -88,9 +91,11 @@ const testArrayParser = () =>
                 ).toStrictEqual(array);
             }
         );
+
         it.each(['1', null, 1])(
             'should not be able to parse "%p" as it is not an array',
-            (array) => {
+            (value) => {
+                const array = turnToJsonData(value);
                 const parseElement = () => ({});
 
                 const message = `${array} is a not an array`;

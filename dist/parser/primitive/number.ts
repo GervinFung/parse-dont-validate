@@ -1,10 +1,38 @@
-import ParseError from '../../error/index.ts';
-import Parser from '../abstract.ts';
-import { inRangeOf, RangeOf } from '../helper/index.ts';
+import Parser from '../class/abstract.ts';
+import {
+    Action,
+    determineAction,
+    Get,
+    LazyGet,
+    Throw,
+} from '../function/action.ts';
+import { inRangeOf, isInRangeOf, RangeOf } from '../helper/index.ts';
 
 type N = number;
 
-export default class NumberParser extends Parser<N> {
+type NumberOptions = Readonly<{
+    number: unknown;
+    inRangeOf?: RangeOf;
+}>;
+function parseAsNumber(options: Throw & NumberOptions): N;
+function parseAsNumber<T>(p: (Get<T> | LazyGet<T>) & NumberOptions): T | N;
+function parseAsNumber<T>(b: Action<T> & NumberOptions): T | N {
+    if (typeof b.number !== 'number') {
+        return determineAction(b);
+    }
+    const { number } = b;
+    if (!b.inRangeOf) {
+        return number;
+    }
+    return isInRangeOf({
+        ...inRangeOf(b.inRangeOf),
+        value: number,
+    })
+        ? number
+        : determineAction(b);
+}
+
+class NumberParser extends Parser<N> {
     private range:
         | undefined
         | Readonly<{
@@ -21,36 +49,29 @@ export default class NumberParser extends Parser<N> {
         return this;
     };
 
-    elseThrow = (message: string): N => {
-        if (typeof this.value === 'number') {
-            return this.value;
-        }
-        throw ParseError.new(message);
-    };
+    elseThrow = (message: string): N =>
+        parseAsNumber({
+            message,
+            number: this.value,
+            inRangeOf: this.range,
+            ifParsingFailThen: 'throw',
+        });
 
-    elseGet = <A>(a: A): N | A => {
-        if (typeof this.value !== 'number') {
-            return a;
-        }
-        const { value: number } = this;
-        if (!this.range) {
-            return number;
-        }
-        return !(number >= this.range.min && number <= this.range.max)
-            ? a
-            : number;
-    };
+    elseGet = <A>(alternativeValue: A): N | A =>
+        parseAsNumber({
+            alternativeValue,
+            number: this.value,
+            inRangeOf: this.range,
+            ifParsingFailThen: 'get',
+        });
 
-    elseLazyGet = <A>(a: () => A): N | A => {
-        if (typeof this.value !== 'number') {
-            return a();
-        }
-        const { value: number } = this;
-        if (!this.range) {
-            return number;
-        }
-        return !(number >= this.range.min && number <= this.range.max)
-            ? a()
-            : number;
-    };
+    elseLazyGet = <A>(alternativeValue: () => A): N | A =>
+        parseAsNumber({
+            alternativeValue,
+            number: this.value,
+            inRangeOf: this.range,
+            ifParsingFailThen: 'lazy-get',
+        });
 }
+
+export { NumberParser, parseAsNumber };

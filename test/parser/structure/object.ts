@@ -4,6 +4,7 @@ import {
     parseAsString,
 } from '../../../src';
 import parse from '../../../src/parser/class';
+import turnToJsonData from '../../util';
 
 const testObjectParser = () =>
     describe('Object parser', () => {
@@ -22,7 +23,8 @@ const testObjectParser = () =>
             } as const,
         ])(
             'should be able to parse object "%p" as it is really an object',
-            (object) => {
+            (value) => {
+                const object = turnToJsonData(value);
                 const parseObject = (object: any) => ({
                     x: parse(object.x)
                         .asNumber()
@@ -112,9 +114,11 @@ const testObjectParser = () =>
                 ).toStrictEqual(object);
             }
         );
+
         it.each(['1', null, 1])(
             'should not be able to parse "%p" as it is not an object',
-            (object) => {
+            (value) => {
+                const object = turnToJsonData(value);
                 const parseObject = () => ({});
 
                 const message = `${object} is a not an object`;

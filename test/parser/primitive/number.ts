@@ -1,11 +1,13 @@
 import { parseAsNumber } from '../../../src';
 import parse from '../../../src/parser/class';
+import turnToJsonData from '../../util';
 
 const testNumberParser = () =>
     describe('Number parser', () => {
         it.each([1, 1000, 1000_000, 100_000_000])(
             'should be able to parse "%i" as it is really a number',
-            (number) => {
+            (value) => {
+                const number = turnToJsonData(value);
                 const message = 'number is a number';
                 const parser = parse(number).asNumber();
 
@@ -53,9 +55,11 @@ const testNumberParser = () =>
                 ).toBe(number);
             }
         );
+
         it.each(['1', {}, true])(
             'should not be able to parse "%p" as it is not a number',
-            (number) => {
+            (value) => {
+                const number = turnToJsonData(value);
                 const message = `${number} is a number`;
                 const parser = parse(number).asNumber();
 

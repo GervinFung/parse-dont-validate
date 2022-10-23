@@ -57,32 +57,56 @@ const parse = (name: unknown) => {
 };
 ```
 
-Instead of just validating and return true false, the type information is passed down by using the method shown above, so whenever `parse` function is called, it will return string and throw error if it's not string
+Instead of just validating and return true/false for the assetion result, the type information is passed down by using the method shown above, so whenever `parse` function is called, it will return string and throw error if it's not string
 
 ### What are the functionalities?
 
-In general, once a parsing function like `parseAsBoolean(true)` for example is called, it returns an Options object that generally contains the following functions
+In general, once a parsing function like `parse(something).asBoolean()` for example is called, it returns an object that generally contains the following functions
 
 1. `elseGet(alternative value)`
 2. `elseThrow(custom message)`
 
-For data structure such as array and object, the second parameter will be a callback function which you write your parsing for each element in the array. See the code below
+Some parser will have their own custom method to make parsing process more strict, i.e. check for number of characters of a string
+
+For array, a function to parse each element must be provided
+
+For object, a function to parse each properties must be provided
+
+There is a custom parser where you will define a predicate the determine whether a value matches the type you expect
+
+### How to use
+
+There are 2 ways of using
+
+1. Chained functions
+2. Named parameters
+
+In general, always prefer `chained functions` version over `named parameters` version as it's more readable, only use `named parameters` version if performance is an issue as its approximately 10x faster than the `chained functions` version according to [here](https://github.com/moltar/typescript-runtime-type-benchmarks)
 
 ```ts
-const parseArray = parseAsReadonlyArray(
-    [1, 2, 3, 4, 5], (value => parseAsNumber(value).elseThrow('whatever')
-).elseGet([]);
-```
+import parse from 'parse-dont-validate';
 
-### How do I use it?
+// chained functions
+const parseArray = parse([1, 2, 3, 4, 5])
+    .asReadonlyArray((value) => parse(value).asNumber().elseThrow('whatever'))
+    .elseGet([]);
 
-```ts
-import { parseAsString } from 'parse-dont-validate';
+// OR
 
-const name = '123'; //assume we don't know it's string
+import { parseAsReadonlyArray, parseAsNumber } from 'parse-dont-validate';
 
-const parsed = parseAsString(name).elseGet('123');
-const parsed = parseAsString(name).elseThrow('this is custom error message');
+// named parameters
+const parseArray = parseAsReadonlyArray({
+    array: [1, 2, 3, 4, 5],
+    ifParsingFailThen: 'get',
+    alternativeValue: [],
+    parseElement: (value) =>
+        parseAsNumber({
+            number: value,
+            ifParsingFailThen: 'throw',
+            message: 'whatever',
+        }),
+});
 ```
 
 ## Additional information

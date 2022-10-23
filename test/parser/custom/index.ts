@@ -1,11 +1,13 @@
 import { parseAsCustom } from '../../../src';
 import parse from '../../../src/parser/class';
+import turnToJsonData from '../../util';
 
 const testCustomParser = () =>
     describe('Custom parser', () => {
         it.each(['string', 1, {}])(
             'should be able to parse "%p" as custom value/type',
-            (value) => {
+            (val) => {
+                const value = turnToJsonData(val);
                 const message = 'boolean is a boolean';
                 const predicate = (value: unknown) => {
                     const type = typeof value;
@@ -49,9 +51,11 @@ const testCustomParser = () =>
                 ).toBe(value);
             }
         );
+
         it.each(['1', {}, 1])(
             'should not be able to parse "%p" as custom value/type when the custom predicate is wrong',
-            (value) => {
+            (val) => {
+                const value = turnToJsonData(val);
                 const message = `${value} is a boolean`;
                 const predicate = (value: any) => Array.isArray(value);
                 const parser = parse(value).asCustom(predicate);

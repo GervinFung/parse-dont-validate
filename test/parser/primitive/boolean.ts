@@ -1,11 +1,13 @@
 import { parseAsBoolean } from '../../../src';
 import parse from '../../../src/parser/class';
+import turnToJsonData from '../../util';
 
 const testBooleanParser = () =>
     describe('Boolean parser', () => {
         it.each([true, false])(
             'should be able to parse "%b" as it is really a boolean',
-            (boolean) => {
+            (value) => {
+                const boolean = turnToJsonData(value);
                 const message = 'boolean is a boolean';
                 const parser = parse(boolean).asBoolean();
 
@@ -37,9 +39,11 @@ const testBooleanParser = () =>
                 ).toBe(boolean);
             }
         );
+
         it.each(['1', {}, 1])(
             'should not be able to parse "%p" as it is not a boolean',
-            (boolean) => {
+            (value) => {
+                const boolean = turnToJsonData(value);
                 const message = `${boolean} is a boolean`;
                 const parser = parse(boolean).asBoolean();
 

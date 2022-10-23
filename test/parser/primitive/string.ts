@@ -1,11 +1,13 @@
 import { parseAsString } from '../../../src';
 import parse from '../../../src/parser/class';
+import turnToJsonData from '../../util';
 
 const testStringParser = () =>
     describe('String parser', () => {
         it.each(['test', '1', 'content'])(
             'should be able to parse "`%s`" as it is really a string',
-            (string) => {
+            (value) => {
+                const string = turnToJsonData(value);
                 const message = 'string is a string';
                 const parser = parse(string).asString();
 
@@ -55,16 +57,18 @@ const testStringParser = () =>
                 ).toBe(string);
             }
         );
+
         it.each([1, {}, true])(
             'should not be able to parse "%p" as it is not a string',
             (value) => {
-                const message = `${value} is a string`;
-                const parser = parse(value).asString();
+                const string = turnToJsonData(value);
+                const message = `${string} is a string`;
+                const parser = parse(string).asString();
 
                 expect(() => parser.elseThrow(message)).toThrowError(message);
                 expect(() =>
                     parseAsString({
-                        string: value,
+                        string: string,
                         message,
                         ifParsingFailThen: 'throw',
                     })
@@ -73,7 +77,7 @@ const testStringParser = () =>
                 expect(parser.elseGet(undefined)).toBeUndefined();
                 expect(
                     parseAsString({
-                        string: value,
+                        string: string,
                         ifParsingFailThen: 'get',
                         alternativeValue: undefined,
                     })
@@ -82,7 +86,7 @@ const testStringParser = () =>
                 expect(parser.elseLazyGet(() => undefined)).toBeUndefined();
                 expect(
                     parseAsString({
-                        string: value,
+                        string: string,
                         ifParsingFailThen: 'lazy-get',
                         alternativeValue: () => undefined,
                     })
@@ -99,7 +103,7 @@ const testStringParser = () =>
                 ).toBeUndefined();
                 expect(
                     parseAsString({
-                        string: value,
+                        string: string,
                         ifParsingFailThen: 'lazy-get',
                         alternativeValue: () => undefined,
                         numberOfCharactersInRangeOf: range,

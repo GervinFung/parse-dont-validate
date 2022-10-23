@@ -1,11 +1,12 @@
 import { parseAsNull } from '../../../src';
 import parse from '../../../src/parser/class';
+import turnToJsonData from '../../util';
 
 const testNullParser = () =>
     describe('Null parser', () => {
         it('should be able to parse null as it is really null', () => {
             const message = 'null is a null';
-            const value = null;
+            const value = turnToJsonData(null);
             const parser = parse(value).asNull();
 
             expect(parser.elseThrow(message)).toBeNull();
@@ -35,9 +36,11 @@ const testNullParser = () =>
                 })
             ).toBeNull();
         });
+
         it.each(['1', {}, 1])(
             'should not be able to parse "%p" as it is not a null',
-            (value) => {
+            (val) => {
+                const value = turnToJsonData(val);
                 const message = `${value} is a null`;
                 const parser = parse(value).asNull();
 
