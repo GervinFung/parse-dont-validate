@@ -74,9 +74,9 @@ This way, developers get to decide how they wanna handle things when data type d
 
 In TypeScript, it may hint that developers did not utilize the type system properly
 
-In JavaScript, it might also hint that the system grew big and they start to forget the type of each variable, this can happen if a project is written in JavaScript at first. As time goes, the codebase becomes huge, at that point they should probably migrate from JavaScript to TypeScript, if they wish to have the benefit of type-checking and if they have the time to do so, rather than relying on tools to validate it, because it is not addressing the root problem
+In JavaScript, it might also hint that the system grew big and they start to forget the type of each variable, this can happen if a project is written in JavaScript at first. As time goes, the codebase becomes huge, rather than replying on tools to validate data type of variables, a more thorough solution is to enrich JavaScript with type definitions, like TypeScript or Flow, if they wish to have the benefit of type-checking and if they have the time to do so, because having type definitions is the way to address the root problem
 
-The reason is simple, because in a small codebase, creating stuffs on the fly is a productivity feature. In a large codebase though, such practice immediately become a liability. In my opinion, objects with arbitrary properties should not exist in such projects
+The reason is simple, because in a small codebase, creating stuffs on the fly is a productivity feature. In a large codebase though, such practice immediately become a liability
 
 As such, in my opinion, if we design things properly in TypeScript/JavaScript, we only ever need to validate the data received from HTTP response. Of course there might be edge cases, but we don't treat edge cases day-to-day cases
 
