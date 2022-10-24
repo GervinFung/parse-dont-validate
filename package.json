@@ -1,7 +1,7 @@
 {
     "name": "parse-dont-validate",
     "description": "Verify the integrity of the data and return it in expected shape. Otherwise throw error or return a specified default value",
-    "version": "3.0.1",
+    "version": "4.0.0",
     "license": "MIT",
     "main": "build/cjs/index.js",
     "module": "build/mjs/index.js",
@@ -18,12 +18,15 @@
     },
     "scripts": {
         "setup": "yarn install --frozen-lockfile",
+        "lint": "eslint src/ test/ -f='stylish' --color",
+        "format": "prettier --ignore-path .gitignore --write src/ test/",
+        "format-check": "prettier --ignore-path .gitignore --check src/ test/",
         "build-mjs": "tsc -p tsconfig.mjs.json && ts-add-js-extension add --dir=build",
         "build-cjs": "tsc -p tsconfig.cjs.json",
-        "build-dts": "tsc -p tsconfig.json",
+        "build-dts": "tsc -p tsconfig.dts.json",
         "build-deno": "denoify",
         "build": "rm -rf build && yarn build-dts && yarn build-cjs && yarn build-mjs && node script/package.js && yarn build-deno",
-        "pretest": "esbuild test/index.ts --bundle --minify --target=node16.3.1 --platform=node --outfile=__tests__/index.test.js",
+        "pretest": "esbuild test/index.ts --bundle --minify --sourcemap --target=node16.3.1 --platform=node --outfile=__tests__/index.test.js",
         "test": "jest -i __tests__"
     },
     "bugs": "https://github.com/P-YNPM/parse-dont-validate/issues",
@@ -37,9 +40,14 @@
     "devDependencies": {
         "@types/jest": "^29.1.2",
         "@types/node": "^18.8.2",
+        "@typescript-eslint/eslint-plugin": "^5.40.1",
+        "@typescript-eslint/parser": "^5.40.1",
+        "cases-of-test": "^0.0.1",
         "denoify": "^1.2.0",
         "esbuild": "^0.15.10",
+        "eslint": "^8.26.0",
         "jest": "29.1.2",
+        "prettier": "^2.7.1",
         "ts-add-js-extension": "^1.2.3",
         "typescript": "^4.8.4"
     },
