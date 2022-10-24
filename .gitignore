@@ -3,7 +3,6 @@ node_modules
 build
 # testing
 coverage
-__tests__
 # misc
 yarn-debug.log*
 yarn-error.log*

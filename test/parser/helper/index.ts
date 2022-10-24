@@ -1,4 +1,5 @@
 import { inRangeOf, isInRangeOf } from '../../../src/parser/helper';
+import { describe, it, expect } from 'vitest';
 
 const testHelper = () => {
     describe('Test helper range function', () => {
