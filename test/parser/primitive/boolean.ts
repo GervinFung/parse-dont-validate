@@ -1,6 +1,7 @@
 import { parseAsBoolean } from '../../../src';
 import parse from '../../../src/parser/class';
 import turnToJsonData from '../../util';
+import { describe, it, expect } from 'vitest';
 
 const testBooleanParser = () =>
     describe('Boolean parser', () => {
