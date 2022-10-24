@@ -23,7 +23,7 @@
         "format-check": "prettier --ignore-path .gitignore --check src/ test/",
         "build-mjs": "tsc -p tsconfig.mjs.json && ts-add-js-extension add --dir=build",
         "build-cjs": "tsc -p tsconfig.cjs.json",
-        "build-dts": "tsc -p tsconfig.ts.json",
+        "build-dts": "tsc -p tsconfig.dts.json",
         "build-deno": "denoify",
         "build": "rm -rf build && yarn build-dts && yarn build-cjs && yarn build-mjs && node script/package.js && yarn build-deno",
         "pretest": "esbuild test/index.ts --bundle --minify --sourcemap --target=node16.3.1 --platform=node --outfile=__tests__/index.test.js",

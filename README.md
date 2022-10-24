@@ -8,18 +8,8 @@ Therefore, no further validation is necessary
 In short, this approach makes it explicit where your data gets refined
 ```
 
-### This package can parse the following type, which is basically valid JSON data
-
-1. boolean
-2. number
-3. string
-4. null
-5. object, readonly and mutable
-6. array, readonly and mutable
-7. custom type
-
 **Note**:
-Please understand that readonly will still create Mutable Object and Array in JavaScript. This is because readonly modifier only prevent developer from mutating a data structure in TypeScript
+Do note that readonly will still create Mutable Object and Array in JavaScript. This is because readonly modifier only prevent developer from mutating a data structure in TypeScript
 
 Thus the transpiled JavaScript will behave without mutation and will not need a readonly modifier
 
@@ -29,7 +19,7 @@ Due to this, I had made it such that using the readonly functions provided will 
 
 `Why do I build this?`
 
-I faced an issue of verifying the shape of the data I needed by calling Third party API or doing web scrapping, although I managed to do it, my intern supervisor (Wong Jia Hau) told me that was a very bad design (See example below)
+I faced an issue of verifying the shape of the data I needed by calling Third party API or doing web scrapping, although I managed to do it, the design is inheritly bad, take a look at the following code
 
 ```ts
 type Human = Readonly<{
@@ -57,7 +47,40 @@ const parse = (name: unknown) => {
 };
 ```
 
-Instead of just validating and return true/false for the assetion result, the type information is passed down by using the method shown above, so whenever `parse` function is called, it will return string and throw error if it's not string
+Instead of just validating and return boolean for the assetion result, the type information is passed down by using the method shown above, so whenever `parse` function is called, it will return the name as string and throw error otherwise
+
+### Why do I need this
+
+Whenever we get the data from somewhere else, we need to validate it, a lot of existing tools provided validation for different data type, while this tool only validate basic JSON data, meaning it will only parse the following data:
+
+1. boolean
+2. number
+3. string
+4. null
+5. object, as readonly or mutable
+6. array, as readonly or mutable
+
+This package use functions to validate the data type, instead of declaring a schema, so its unlike other validation tools.
+
+```ts
+const parseArray = parse(someArray)
+    .asReadonlyArray((value) => parse(value).asNumber().elseThrow('whatever'))
+    .elseGet([]);
+```
+
+This way, developers get to decide how they wanna handle things when data type does not match
+
+**Why the functionalities of this tool is limited only to parsing JSON data?**
+
+In TypeScript, it may hint that developers did not utilize the type system properly
+
+In JavaScript, it might also hint that the system grew big and they start to forget the type of each variable, this can happen if a project is written in JavaScript at first. As time goes, the codebase becomes huge, at that point they should probably migrate from JavaScript to TypeScript, if they wish to have the benefit of type-checking and if they have the time to do so, rather than relying on tools to validate it, because it is not addressing the root problem
+
+The reason is simple, because in a small codebase, creating stuffs on the fly is a productivity feature. In a large codebase though, such practice immediately become a liability. In my opinion, objects with arbitrary properties should not exist in such projects
+
+As such, in my opinion, if we design things properly in TypeScript/JavaScript, we only ever need to validate the data received from HTTP response. Of course there might be edge cases, but we don't treat edge cases day-to-day cases
+
+As for projects started with JavaScript and is too late to migrate to TypeScript, please consider using other validation packages
 
 ### What are the functionalities?
 
@@ -81,7 +104,7 @@ There are 2 ways of using
 1. Chained functions
 2. Named parameters
 
-In general, always prefer `chained functions` version over `named parameters` version as it's more readable, only use `named parameters` version if performance is an issue as its approximately 10x faster than the `chained functions` version according to [here](https://github.com/moltar/typescript-runtime-type-benchmarks)
+In general, always prefer `chained functions` version over `named parameters` version as it's more readable, only use `named parameters` version if performance is an issue, as its way faster than the `chained functions` version according to [this benchmark](https://github.com/moltar/typescript-runtime-type-benchmarks)
 
 ```ts
 import parse from 'parse-dont-validate';
