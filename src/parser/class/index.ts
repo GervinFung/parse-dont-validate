@@ -20,18 +20,18 @@ class Parser {
     asCustom = <C>(predicate: ConstructorParameters<typeof CustomParser>[1]) =>
         new CustomParser<C>(this.value, predicate);
 
-    asMutableArray = (
-        parseElement: ConstructorParameters<typeof MutableArrayParser>[1]
+    asMutableArray = <E>(
+        parseElement: ConstructorParameters<typeof MutableArrayParser<E>>[1]
     ) => new MutableArrayParser(this.value, parseElement);
-    asReadonlyArray = (
-        parseElement: ConstructorParameters<typeof ReadonlyArrayParser>[1]
+    asReadonlyArray = <E>(
+        parseElement: ConstructorParameters<typeof ReadonlyArrayParser<E>>[1]
     ) => new ReadonlyArrayParser(this.value, parseElement);
 
-    asMutableObject = (
-        parse: ConstructorParameters<typeof MutableObjectParser>[1]
+    asMutableObject = <O extends Object>(
+        parse: ConstructorParameters<typeof MutableObjectParser<O>>[1]
     ) => new MutableObjectParser(this.value, parse);
-    asReadonlyObject = (
-        parse: ConstructorParameters<typeof ReadonlyObjectParser>[1]
+    asReadonlyObject = <O extends Object>(
+        parse: ConstructorParameters<typeof ReadonlyObjectParser<O>>[1]
     ) => new ReadonlyObjectParser(this.value, parse);
 }
 
