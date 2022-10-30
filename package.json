@@ -24,7 +24,7 @@
         "build-mjs": "tsc -p tsconfig.mjs.json && ts-add-js-extension add --dir=build",
         "build-cjs": "tsc -p tsconfig.cjs.json",
         "build-dts": "tsc -p tsconfig.dts.json",
-        "build": "rm -rf build dist && pnpm build-dts && pnpm build-cjs && pnpm build-mjs && node script/package.js",
+        "build": "rm -rf build dist && pnpm build-dts && pnpm build-cjs && pnpm build-mjs && node-package-helper",
         "test": "vitest"
     },
     "bugs": "https://github.com/P-YNPM/parse-dont-validate/issues",
@@ -41,6 +41,7 @@
         "@typescript-eslint/parser": "^5.40.1",
         "cases-of-test": "^0.0.1",
         "eslint": "^8.26.0",
+        "node-package-helper": "github:Packer-Man/node-package-helper",
         "prettier": "^2.7.1",
         "ts-add-js-extension": "^1.3.2",
         "typescript": "^4.8.4",
