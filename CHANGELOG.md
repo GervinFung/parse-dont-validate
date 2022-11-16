@@ -1,3 +1,7 @@
+## 4.0.2 (17 Nov 2022)
+
+-   (Fix) Improve parameter name
+
 ## 4.0.1 (24 Oct 2022)
 
 -   (Fix) Infer array and object chain functions parser

@@ -15,20 +15,22 @@ type StringOptions = Readonly<{
     numberOfCharactersInRangeOf?: RangeOf;
 }>;
 function parseAsString(options: Throw & StringOptions): S;
-function parseAsString<T>(p: (Get<T> | LazyGet<T>) & StringOptions): T | S;
-function parseAsString<T>(b: Action<T> & StringOptions): T | S {
-    if (typeof b.string !== 'string') {
-        return determineAction(b);
+function parseAsString<T>(
+    options: (Get<T> | LazyGet<T>) & StringOptions
+): T | S;
+function parseAsString<T>(options: Action<T> & StringOptions): T | S {
+    if (typeof options.string !== 'string') {
+        return determineAction(options);
     }
-    if (!b.numberOfCharactersInRangeOf) {
-        return b.string;
+    if (!options.numberOfCharactersInRangeOf) {
+        return options.string;
     }
     return isInRangeOf({
-        ...inRangeOf(b.numberOfCharactersInRangeOf),
-        value: b.string.length,
+        ...inRangeOf(options.numberOfCharactersInRangeOf),
+        value: options.string.length,
     })
-        ? b.string
-        : determineAction(b);
+        ? options.string
+        : determineAction(options);
 }
 
 class StringParser extends Parser<S> {

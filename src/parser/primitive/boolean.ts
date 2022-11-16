@@ -12,11 +12,15 @@ type B = boolean;
 type BooleanOptions = Readonly<{
     boolean: unknown;
 }>;
+
 function parseAsBoolean(options: Throw & BooleanOptions): B;
-function parseAsBoolean<T>(p: Get<T> & BooleanOptions): T | B;
-function parseAsBoolean<T>(p: LazyGet<T> & BooleanOptions): T | B;
-function parseAsBoolean<T>(b: Action<T> & BooleanOptions): T | B {
-    return typeof b.boolean === 'boolean' ? b.boolean : determineAction(b);
+function parseAsBoolean<T>(
+    options: (Get<T> | LazyGet<T>) & BooleanOptions
+): T | B;
+function parseAsBoolean<T>(options: Action<T> & BooleanOptions): T | B {
+    return typeof options.boolean === 'boolean'
+        ? options.boolean
+        : determineAction(options);
 }
 
 class BooleanParser extends Parser<B> {
@@ -47,3 +51,9 @@ class BooleanParser extends Parser<B> {
 }
 
 export { BooleanParser, parseAsBoolean };
+
+parseAsBoolean({
+    alternativeValue: () => '',
+    boolean: '',
+    ifParsingFailThen: 'lazy-get',
+});
