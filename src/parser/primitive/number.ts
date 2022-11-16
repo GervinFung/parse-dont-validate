@@ -15,21 +15,23 @@ type NumberOptions = Readonly<{
     inRangeOf?: RangeOf;
 }>;
 function parseAsNumber(options: Throw & NumberOptions): N;
-function parseAsNumber<T>(p: (Get<T> | LazyGet<T>) & NumberOptions): T | N;
-function parseAsNumber<T>(b: Action<T> & NumberOptions): T | N {
-    if (typeof b.number !== 'number') {
-        return determineAction(b);
+function parseAsNumber<T>(
+    options: (Get<T> | LazyGet<T>) & NumberOptions
+): T | N;
+function parseAsNumber<T>(options: Action<T> & NumberOptions): T | N {
+    if (typeof options.number !== 'number') {
+        return determineAction(options);
     }
-    const { number } = b;
-    if (!b.inRangeOf) {
+    const { number } = options;
+    if (!options.inRangeOf) {
         return number;
     }
     return isInRangeOf({
-        ...inRangeOf(b.inRangeOf),
+        ...inRangeOf(options.inRangeOf),
         value: number,
     })
         ? number
-        : determineAction(b);
+        : determineAction(options);
 }
 
 class NumberParser extends Parser<N> {

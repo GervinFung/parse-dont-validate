@@ -14,10 +14,13 @@ type CustomPredicate = Readonly<{
 }>;
 
 function parseAsCustom<C>(options: Throw & CustomPredicate): C;
-function parseAsCustom<C, T>(p: Get<T> & CustomPredicate): T | C;
-function parseAsCustom<C, T>(p: LazyGet<T> & CustomPredicate): T | C;
-function parseAsCustom<C, T>(b: Action<T> & CustomPredicate): T | C {
-    return b.predicate(b.value) ? b.value : determineAction(b);
+function parseAsCustom<C, T>(
+    options: (Get<T> | LazyGet<T>) & CustomPredicate
+): T | C;
+function parseAsCustom<C, T>(options: Action<T> & CustomPredicate): T | C {
+    return options.predicate(options.value)
+        ? options.value
+        : determineAction(options);
 }
 
 class CustomParser<C = any> extends Parser<C> {

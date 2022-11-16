@@ -17,11 +17,11 @@ function parseAsMutableArray<R, T>(
     p: (Get<T> | LazyGet<T>) & ArrayOptions<R>
 ): T | Array<R>;
 function parseAsMutableArray<R, T>(
-    b: Action<T> & ArrayOptions<R>
+    p: Action<T> & ArrayOptions<R>
 ): T | Array<R> {
-    return !Array.isArray(b.array)
-        ? determineAction(b)
-        : b.array.map(b.parseElement);
+    return !Array.isArray(p.array)
+        ? determineAction(p)
+        : p.array.map(p.parseElement);
 }
 
 function parseAsReadonlyArray<R>(p: Throw & ArrayOptions<R>): ReadonlyArray<R>;
