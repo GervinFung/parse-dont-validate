@@ -14,11 +14,13 @@ type NumberOptions = Readonly<{
     number: unknown;
     inRangeOf?: RangeOf;
 }>;
-function parseAsNumber(options: Throw & NumberOptions): N;
+function parseAsNumber<E extends Error>(options: Throw<E> & NumberOptions): N;
 function parseAsNumber<T>(
     options: (Get<T> | LazyGet<T>) & NumberOptions
 ): T | N;
-function parseAsNumber<T>(options: Action<T> & NumberOptions): T | N {
+function parseAsNumber<T, E extends Error>(
+    options: Action<T, E> & NumberOptions
+): T | N {
     if (typeof options.number !== 'number') {
         return determineAction(options);
     }
@@ -51,7 +53,7 @@ class NumberParser extends Parser<N> {
         return this;
     };
 
-    elseThrow = (message: string): N =>
+    elseThrow = <E extends Error>(message: Throw<E>['message']): N =>
         parseAsNumber({
             message,
             number: this.value,
@@ -59,7 +61,7 @@ class NumberParser extends Parser<N> {
             ifParsingFailThen: 'throw',
         });
 
-    elseGet = <A>(alternativeValue: A): N | A =>
+    elseGet = <A>(alternativeValue: Get<A>['alternativeValue']): N | A =>
         parseAsNumber({
             alternativeValue,
             number: this.value,
@@ -67,7 +69,9 @@ class NumberParser extends Parser<N> {
             ifParsingFailThen: 'get',
         });
 
-    elseLazyGet = <A>(alternativeValue: () => A): N | A =>
+    elseLazyGet = <A>(
+        alternativeValue: LazyGet<A>['alternativeValue']
+    ): N | A =>
         parseAsNumber({
             alternativeValue,
             number: this.value,

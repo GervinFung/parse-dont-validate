@@ -48,13 +48,21 @@ const testObjectParser = () =>
                 });
 
                 const message = 'object is a object';
+                const errorMessage = new Error(message);
                 const mutableParser =
                     parse(object).asMutableObject(parseObject);
                 const readonlyParser =
                     parse(object).asReadonlyObject(parseObject);
 
                 expect(mutableParser.elseThrow(message)).toStrictEqual(object);
+                expect(mutableParser.elseThrow(errorMessage)).toStrictEqual(
+                    object
+                );
                 expect(readonlyParser.elseThrow(message)).toStrictEqual(object);
+                expect(readonlyParser.elseThrow(errorMessage)).toStrictEqual(
+                    object
+                );
+
                 expect(
                     parseAsMutableObject({
                         object,
@@ -64,10 +72,26 @@ const testObjectParser = () =>
                     })
                 ).toStrictEqual(object);
                 expect(
+                    parseAsMutableObject({
+                        object,
+                        parse: parseObject,
+                        message: errorMessage,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toStrictEqual(object);
+                expect(
                     parseAsReadonlyObject({
                         object,
                         message,
                         parse: parseObject,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toStrictEqual(object);
+                expect(
+                    parseAsReadonlyObject({
+                        object,
+                        parse: parseObject,
+                        message: errorMessage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toStrictEqual(object);
@@ -123,6 +147,7 @@ const testObjectParser = () =>
                 const parseObject = () => ({});
 
                 const message = `${object} is a not an object`;
+                const errorMessage = new Error(message);
                 const mutableParser =
                     parse(object).asMutableObject(parseObject);
                 const readonlyParser =
@@ -131,9 +156,16 @@ const testObjectParser = () =>
                 expect(() => mutableParser.elseThrow(message)).toThrowError(
                     message
                 );
+                expect(() =>
+                    mutableParser.elseThrow(errorMessage)
+                ).toThrowError(message);
                 expect(() => readonlyParser.elseThrow(message)).toThrowError(
                     message
                 );
+                expect(() =>
+                    readonlyParser.elseThrow(errorMessage)
+                ).toThrowError(message);
+
                 expect(() =>
                     parseAsMutableObject({
                         object,
@@ -143,10 +175,26 @@ const testObjectParser = () =>
                     })
                 ).toThrowError(message);
                 expect(() =>
+                    parseAsMutableObject({
+                        object,
+                        parse: parseObject,
+                        message: errorMessage,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toThrowError(message);
+                expect(() =>
                     parseAsReadonlyObject({
                         object,
                         message,
                         parse: parseObject,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toThrowError(message);
+                expect(() =>
+                    parseAsReadonlyObject({
+                        object,
+                        parse: parseObject,
+                        message: errorMessage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toThrowError(message);

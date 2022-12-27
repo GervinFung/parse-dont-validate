@@ -1,3 +1,7 @@
+# 4.1.0 (27 Dec 2022)
+
+-   (Feat) Allow custom error object
+
 ## 4.0.2 (17 Nov 2022)
 
 -   (Fix) Improve parameter name

@@ -14,38 +14,40 @@ type ObjectOptions<R extends Object> = Readonly<{
 
 const isObject = (o: unknown) => o !== null && typeof o === 'object';
 
-function parseAsMutableObject<R extends Object>(p: Throw & ObjectOptions<R>): R;
+function parseAsMutableObject<R extends Object, E extends Error>(
+    options: Throw<E> & ObjectOptions<R>
+): R;
 function parseAsMutableObject<R extends Object, T>(
-    p: Get<T> & ObjectOptions<R>
+    options: Get<T> & ObjectOptions<R>
 ): T | R;
 function parseAsMutableObject<R extends Object, T>(
-    p: LazyGet<T> & ObjectOptions<R>
+    options: LazyGet<T> & ObjectOptions<R>
 ): T | R;
-function parseAsMutableObject<R extends Object, T>(
-    b: Action<T> & ObjectOptions<R>
+function parseAsMutableObject<R extends Object, T, E extends Error>(
+    options: Action<T, E> & ObjectOptions<R>
 ): T | R {
-    if (isObject(b.object)) {
-        return b.parse(b.object);
+    if (isObject(options.object)) {
+        return options.parse(options.object);
     }
-    return determineAction(b);
+    return determineAction(options);
 }
 
-function parseAsReadonlyObject<R extends Object>(
-    p: Throw & ObjectOptions<R>
+function parseAsReadonlyObject<R extends Object, E extends Error>(
+    options: Throw<E> & ObjectOptions<R>
 ): Readonly<R>;
 function parseAsReadonlyObject<R extends Object, T>(
-    p: Get<T> & ObjectOptions<R>
+    options: Get<T> & ObjectOptions<R>
 ): T | Readonly<R>;
 function parseAsReadonlyObject<R extends Object, T>(
-    p: LazyGet<T> & ObjectOptions<R>
+    options: LazyGet<T> & ObjectOptions<R>
 ): T | Readonly<R>;
-function parseAsReadonlyObject<R extends Object, T>(
-    b: Action<T> & ObjectOptions<R>
+function parseAsReadonlyObject<R extends Object, T, E extends Error>(
+    options: Action<T, E> & ObjectOptions<R>
 ): T | Readonly<R> {
-    if (isObject(b.object)) {
-        return Object.freeze(b.parse(b.object));
+    if (isObject(options.object)) {
+        return Object.freeze(options.parse(options.object));
     }
-    return determineAction(b);
+    return determineAction(options);
 }
 
 type Parse<O extends Object> = ObjectOptions<O>['parse'];
@@ -61,7 +63,7 @@ class MutableObjectParser<O extends Object> extends ObjectParser<O> {
         super(object, parse);
     }
 
-    elseGet = <A>(alternativeValue: A): A | O =>
+    elseGet = <A>(alternativeValue: Get<A>['alternativeValue']): A | O =>
         parseAsMutableObject({
             alternativeValue,
             parse: this.parse,
@@ -69,7 +71,9 @@ class MutableObjectParser<O extends Object> extends ObjectParser<O> {
             ifParsingFailThen: 'get',
         });
 
-    elseLazyGet = <A>(alternativeValue: () => A): A | O =>
+    elseLazyGet = <A>(
+        alternativeValue: LazyGet<A>['alternativeValue']
+    ): A | O =>
         parseAsMutableObject({
             alternativeValue,
             parse: this.parse,
@@ -77,7 +81,7 @@ class MutableObjectParser<O extends Object> extends ObjectParser<O> {
             ifParsingFailThen: 'lazy-get',
         });
 
-    elseThrow = (message: string): O =>
+    elseThrow = <E extends Error>(message: Throw<E>['message']): O =>
         parseAsMutableObject({
             message,
             parse: this.parse,
@@ -91,7 +95,9 @@ class ReadonlyObjectParser<O extends Object> extends ObjectParser<O> {
         super(object, parse);
     }
 
-    elseGet = <A>(alternativeValue: A): A | Readonly<O> =>
+    elseGet = <A>(
+        alternativeValue: Get<A>['alternativeValue']
+    ): A | Readonly<O> =>
         parseAsReadonlyObject({
             alternativeValue,
             parse: this.parse,
@@ -99,7 +105,9 @@ class ReadonlyObjectParser<O extends Object> extends ObjectParser<O> {
             ifParsingFailThen: 'get',
         });
 
-    elseLazyGet = <A>(alternativeValue: () => A): A | Readonly<O> =>
+    elseLazyGet = <A>(
+        alternativeValue: LazyGet<A>['alternativeValue']
+    ): A | Readonly<O> =>
         parseAsReadonlyObject({
             alternativeValue,
             parse: this.parse,
@@ -107,7 +115,7 @@ class ReadonlyObjectParser<O extends Object> extends ObjectParser<O> {
             ifParsingFailThen: 'lazy-get',
         });
 
-    elseThrow = (message: string): Readonly<O> =>
+    elseThrow = <E extends Error>(message: Throw<E>['message']): Readonly<O> =>
         parseAsReadonlyObject({
             message,
             parse: this.parse,
