@@ -68,7 +68,7 @@ const testNullParser = () =>
                         ifParsingFailThen: 'throw',
                     })
                 ).toThrowError(message);
-                expect(
+                expect(() =>
                     parseAsNull({
                         value,
                         message: errorMessage,
