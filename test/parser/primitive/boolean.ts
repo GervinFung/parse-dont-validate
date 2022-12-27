@@ -10,13 +10,22 @@ const testBooleanParser = () =>
             (value) => {
                 const boolean = turnToJsonData(value);
                 const message = 'boolean is a boolean';
+                const errorMessage = new TypeError('boolean is a boolean');
                 const parser = parse(boolean).asBoolean();
 
                 expect(parser.elseThrow(message)).toBe(boolean);
+                expect(parser.elseThrow(errorMessage)).toBe(boolean);
                 expect(
                     parseAsBoolean({
                         boolean,
                         message,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toBe(boolean);
+                expect(
+                    parseAsBoolean({
+                        boolean,
+                        message: errorMessage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toBe(boolean);
@@ -46,13 +55,24 @@ const testBooleanParser = () =>
             (value) => {
                 const boolean = turnToJsonData(value);
                 const message = `${boolean} is a boolean`;
+                const errorMessage = new TypeError(message);
                 const parser = parse(boolean).asBoolean();
 
                 expect(() => parser.elseThrow(message)).toThrowError(message);
+                expect(() => parser.elseThrow(errorMessage)).toThrowError(
+                    message
+                );
                 expect(() =>
                     parseAsBoolean({
                         boolean,
                         message,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toThrowError(message);
+                expect(() =>
+                    parseAsBoolean({
+                        boolean,
+                        message: errorMessage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toThrowError(message);

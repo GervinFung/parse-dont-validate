@@ -10,13 +10,22 @@ const testStringParser = () =>
             (value) => {
                 const string = turnToJsonData(value);
                 const message = 'string is a string';
+                const errorMessage = new TypeError(message);
                 const parser = parse(string).asString();
 
                 expect(parser.elseThrow(message)).toBe(string);
+                expect(parser.elseThrow(errorMessage)).toBe(string);
                 expect(
                     parseAsString({
                         string,
                         message,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toBe(string);
+                expect(
+                    parseAsString({
+                        string,
+                        message: errorMessage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toBe(string);
@@ -64,13 +73,24 @@ const testStringParser = () =>
             (value) => {
                 const string = turnToJsonData(value);
                 const message = `${string} is a string`;
+                const errorMessage = new TypeError(message);
                 const parser = parse(string).asString();
 
                 expect(() => parser.elseThrow(message)).toThrowError(message);
+                expect(() => parser.elseThrow(errorMessage)).toThrowError(
+                    message
+                );
                 expect(() =>
                     parseAsString({
-                        string: string,
+                        string,
                         message,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toThrowError(message);
+                expect(() =>
+                    parseAsString({
+                        string,
+                        message: errorMessage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toThrowError(message);
@@ -78,7 +98,7 @@ const testStringParser = () =>
                 expect(parser.elseGet(undefined)).toBeUndefined();
                 expect(
                     parseAsString({
-                        string: string,
+                        string,
                         ifParsingFailThen: 'get',
                         alternativeValue: undefined,
                     })
@@ -87,7 +107,7 @@ const testStringParser = () =>
                 expect(parser.elseLazyGet(() => undefined)).toBeUndefined();
                 expect(
                     parseAsString({
-                        string: string,
+                        string,
                         ifParsingFailThen: 'lazy-get',
                         alternativeValue: () => undefined,
                     })
@@ -104,7 +124,7 @@ const testStringParser = () =>
                 ).toBeUndefined();
                 expect(
                     parseAsString({
-                        string: string,
+                        string,
                         ifParsingFailThen: 'lazy-get',
                         alternativeValue: () => undefined,
                         numberOfCharactersInRangeOf: range,

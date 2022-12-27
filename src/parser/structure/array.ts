@@ -12,44 +12,50 @@ type ArrayOptions<R> = Readonly<{
     parseElement: (a: any, index?: number, array?: Array<any>) => R;
 }>;
 
-function parseAsMutableArray<R>(p: Throw & ArrayOptions<R>): Array<R>;
+function parseAsMutableArray<R, E extends Error>(
+    options: Throw<E> & ArrayOptions<R>
+): Array<R>;
 function parseAsMutableArray<R, T>(
-    p: (Get<T> | LazyGet<T>) & ArrayOptions<R>
+    options: (Get<T> | LazyGet<T>) & ArrayOptions<R>
 ): T | Array<R>;
-function parseAsMutableArray<R, T>(
-    p: Action<T> & ArrayOptions<R>
+function parseAsMutableArray<R, T, E extends Error>(
+    options: Action<T, E> & ArrayOptions<R>
 ): T | Array<R> {
-    return !Array.isArray(p.array)
-        ? determineAction(p)
-        : p.array.map(p.parseElement);
+    return !Array.isArray(options.array)
+        ? determineAction(options)
+        : options.array.map(options.parseElement);
 }
 
-function parseAsReadonlyArray<R>(p: Throw & ArrayOptions<R>): ReadonlyArray<R>;
+function parseAsReadonlyArray<R, E extends Error>(
+    options: Throw<E> & ArrayOptions<R>
+): ReadonlyArray<R>;
 function parseAsReadonlyArray<R, T>(
-    p: (Get<T> | LazyGet<T>) & ArrayOptions<R>
+    options: (Get<T> | LazyGet<T>) & ArrayOptions<R>
 ): T | ReadonlyArray<R>;
-function parseAsReadonlyArray<R, T>(
-    b: Action<T> & ArrayOptions<R>
+function parseAsReadonlyArray<R, T, E extends Error>(
+    options: Action<T, E> & ArrayOptions<R>
 ): T | ReadonlyArray<R> {
-    return !Array.isArray(b.array)
-        ? determineAction(b)
-        : Object.freeze(b.array.map(b.parseElement));
+    return !Array.isArray(options.array)
+        ? determineAction(options)
+        : Object.freeze(options.array.map(options.parseElement));
 }
 
-type Parse<E> = ArrayOptions<E>['parseElement'];
+type Parse<Element> = ArrayOptions<Element>['parseElement'];
 
-abstract class ArrayParser<E> extends Parser<ReadonlyArray<E>> {
-    constructor(value: any, protected readonly parseElement: Parse<E>) {
+abstract class ArrayParser<Element> extends Parser<ReadonlyArray<Element>> {
+    constructor(value: any, protected readonly parseElement: Parse<Element>) {
         super(value);
     }
 }
 
-class ReadonlyArrayParser<E> extends ArrayParser<E> {
-    constructor(array: any, parseElement: Parse<E>) {
+class ReadonlyArrayParser<Element> extends ArrayParser<Element> {
+    constructor(array: any, parseElement: Parse<Element>) {
         super(array, parseElement);
     }
 
-    elseGet = <A>(alternativeValue: A): A | ReadonlyArray<E> =>
+    elseGet = <A>(
+        alternativeValue: Get<A>['alternativeValue']
+    ): A | ReadonlyArray<Element> =>
         parseAsReadonlyArray({
             alternativeValue,
             array: this.value,
@@ -57,7 +63,9 @@ class ReadonlyArrayParser<E> extends ArrayParser<E> {
             parseElement: this.parseElement,
         });
 
-    elseLazyGet = <A>(alternativeValue: () => A): A | ReadonlyArray<E> =>
+    elseLazyGet = <A>(
+        alternativeValue: LazyGet<A>['alternativeValue']
+    ): A | ReadonlyArray<Element> =>
         parseAsReadonlyArray({
             alternativeValue,
             array: this.value,
@@ -65,7 +73,9 @@ class ReadonlyArrayParser<E> extends ArrayParser<E> {
             parseElement: this.parseElement,
         });
 
-    elseThrow = (message: string): ReadonlyArray<E> =>
+    elseThrow = <E extends Error>(
+        message: Throw<E>['message']
+    ): ReadonlyArray<Element> =>
         parseAsReadonlyArray({
             message,
             array: this.value,
@@ -74,12 +84,14 @@ class ReadonlyArrayParser<E> extends ArrayParser<E> {
         });
 }
 
-class MutableArrayParser<E> extends ArrayParser<E> {
-    constructor(array: any, parseElement: Parse<E>) {
+class MutableArrayParser<Element> extends ArrayParser<Element> {
+    constructor(array: any, parseElement: Parse<Element>) {
         super(array, parseElement);
     }
 
-    elseGet = <A>(alternativeValue: A): A | Array<E> =>
+    elseGet = <A>(
+        alternativeValue: Get<A>['alternativeValue']
+    ): A | Array<Element> =>
         parseAsMutableArray({
             alternativeValue,
             array: this.value,
@@ -87,7 +99,9 @@ class MutableArrayParser<E> extends ArrayParser<E> {
             parseElement: this.parseElement,
         });
 
-    elseLazyGet = <A>(alternativeValue: () => A): A | Array<E> =>
+    elseLazyGet = <A>(
+        alternativeValue: LazyGet<A>['alternativeValue']
+    ): A | Array<Element> =>
         parseAsMutableArray({
             alternativeValue,
             array: this.value,
@@ -95,7 +109,9 @@ class MutableArrayParser<E> extends ArrayParser<E> {
             parseElement: this.parseElement,
         });
 
-    elseThrow = (message: string): Array<E> =>
+    elseThrow = <E extends Error>(
+        message: Throw<E>['message']
+    ): Array<Element> =>
         parseAsMutableArray({
             message,
             array: this.value,

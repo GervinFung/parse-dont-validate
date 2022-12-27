@@ -5,7 +5,7 @@ type RangeOf = Readonly<{
 
 const inRangeOf = ({ min, max }: RangeOf): RangeOf => {
     if (min > max || max < min) {
-        throw new Error(
+        throw new RangeError(
             `min must be less than max, max must also be greater than min. Min: ${min}, Max: ${max}`
         );
     }

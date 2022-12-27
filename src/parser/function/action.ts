@@ -1,7 +1,7 @@
 import ParserError from '../../error';
 
-type Throw = Readonly<{
-    message: string;
+type Throw<E extends Error> = Readonly<{
+    message: E | string;
     ifParsingFailThen: 'throw';
 }>;
 
@@ -15,16 +15,21 @@ type LazyGet<T> = Readonly<{
     ifParsingFailThen: 'lazy-get';
 }>;
 
-type Action<T> = Throw | Get<T> | LazyGet<T>;
+type Action<T, E extends Error> = Throw<E> | Get<T> | LazyGet<T>;
 
-const determineAction = <T>(b: Action<T>) => {
+const determineAction = <T, E extends Error>(b: Action<T, E>) => {
     switch (b.ifParsingFailThen) {
-        case 'get':
+        case 'get': {
             return b.alternativeValue;
-        case 'lazy-get':
+        }
+        case 'lazy-get': {
             return b.alternativeValue();
-        case 'throw':
-            throw ParserError.fromMessage(b.message);
+        }
+        case 'throw': {
+            throw b.message instanceof Error
+                ? b.message
+                : ParserError.fromMessage(b.message);
+        }
     }
 };
 

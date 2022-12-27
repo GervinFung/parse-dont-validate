@@ -26,12 +26,20 @@ const testArrayParser = () =>
                         );
 
                 const message = 'object is a object';
+                const errorMessgage = new Error(message);
                 const mutableParser = parse(array).asMutableArray(parseElement);
                 const readonlyParser =
                     parse(array).asReadonlyArray(parseElement);
 
                 expect(mutableParser.elseThrow(message)).toStrictEqual(array);
+                expect(mutableParser.elseThrow(errorMessgage)).toStrictEqual(
+                    array
+                );
                 expect(readonlyParser.elseThrow(message)).toStrictEqual(array);
+                expect(readonlyParser.elseThrow(errorMessgage)).toStrictEqual(
+                    array
+                );
+
                 expect(
                     parseAsMutableArray({
                         array,
@@ -41,10 +49,26 @@ const testArrayParser = () =>
                     })
                 ).toStrictEqual(array);
                 expect(
+                    parseAsMutableArray({
+                        array,
+                        parseElement,
+                        message: errorMessgage,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toStrictEqual(array);
+                expect(
                     parseAsReadonlyArray({
                         array,
                         message,
                         parseElement,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toStrictEqual(array);
+                expect(
+                    parseAsReadonlyArray({
+                        array,
+                        parseElement,
+                        message: errorMessgage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toStrictEqual(array);
@@ -100,6 +124,7 @@ const testArrayParser = () =>
                 const parseElement = () => ({});
 
                 const message = `${array} is a not an array`;
+                const errorMessgage = new Error(message);
                 const mutableParser = parse(array).asMutableArray(parseElement);
                 const readonlyParser =
                     parse(array).asReadonlyArray(parseElement);
@@ -107,9 +132,16 @@ const testArrayParser = () =>
                 expect(() => mutableParser.elseThrow(message)).toThrowError(
                     message
                 );
+                expect(() =>
+                    mutableParser.elseThrow(errorMessgage)
+                ).toThrowError(message);
                 expect(() => readonlyParser.elseThrow(message)).toThrowError(
                     message
                 );
+                expect(() =>
+                    readonlyParser.elseThrow(errorMessgage)
+                ).toThrowError(message);
+
                 expect(() =>
                     parseAsMutableArray({
                         array,
@@ -119,10 +151,26 @@ const testArrayParser = () =>
                     })
                 ).toThrowError(message);
                 expect(() =>
+                    parseAsMutableArray({
+                        array,
+                        parseElement,
+                        message: errorMessgage,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toThrowError(message);
+                expect(() =>
                     parseAsReadonlyArray({
                         array,
                         message,
                         parseElement,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toThrowError(message);
+                expect(() =>
+                    parseAsReadonlyArray({
+                        array,
+                        parseElement,
+                        message: errorMessgage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toThrowError(message);

@@ -10,13 +10,22 @@ const testNumberParser = () =>
             (value) => {
                 const number = turnToJsonData(value);
                 const message = 'number is a number';
+                const errorMessgage = new TypeError(message);
                 const parser = parse(number).asNumber();
 
                 expect(parser.elseThrow(message)).toBe(number);
+                expect(parser.elseThrow(errorMessgage)).toBe(number);
                 expect(
                     parseAsNumber({
                         number,
                         message,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toBe(number);
+                expect(
+                    parseAsNumber({
+                        number,
+                        message: errorMessgage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toBe(number);
@@ -62,13 +71,24 @@ const testNumberParser = () =>
             (value) => {
                 const number = turnToJsonData(value);
                 const message = `${number} is a number`;
+                const errorMessgage = new TypeError(message);
                 const parser = parse(number).asNumber();
 
                 expect(() => parser.elseThrow(message)).toThrowError(message);
+                expect(() => parser.elseThrow(errorMessgage)).toThrowError(
+                    message
+                );
                 expect(() =>
                     parseAsNumber({
                         number,
                         message,
+                        ifParsingFailThen: 'throw',
+                    })
+                ).toThrowError(message);
+                expect(() =>
+                    parseAsNumber({
+                        number,
+                        message: errorMessgage,
                         ifParsingFailThen: 'throw',
                     })
                 ).toThrowError(message);

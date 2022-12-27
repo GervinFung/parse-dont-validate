@@ -13,11 +13,13 @@ type NullOptions = Readonly<{
     value: unknown;
 }>;
 
-function parseAsNull(p: Throw & NullOptions): null;
-function parseAsNull<T>(p: Get<T> & NullOptions): T | null;
-function parseAsNull<T>(p: LazyGet<T> & NullOptions): T | null;
-function parseAsNull<T>(b: Action<T> & NullOptions): T | null {
-    return b.value === null ? b.value : determineAction(b);
+function parseAsNull<T, E extends Error>(options: Throw<E> & NullOptions): null;
+function parseAsNull<T>(options: Get<T> & NullOptions): T | null;
+function parseAsNull<T>(options: LazyGet<T> & NullOptions): T | null;
+function parseAsNull<T, E extends Error>(
+    options: Action<T, E> & NullOptions
+): T | null {
+    return options.value === null ? options.value : determineAction(options);
 }
 
 class NullParser extends Parser<N> {
@@ -25,21 +27,23 @@ class NullParser extends Parser<N> {
         super(value);
     }
 
-    elseGet = <A>(alternativeValue: A): A | N =>
+    elseGet = <A>(alternativeValue: Get<A>['alternativeValue']): A | N =>
         parseAsNull({
             alternativeValue,
             value: this.value,
             ifParsingFailThen: 'get',
         });
 
-    elseLazyGet = <A>(alternativeValue: () => A): A | N =>
+    elseLazyGet = <A>(
+        alternativeValue: LazyGet<A>['alternativeValue']
+    ): A | N =>
         parseAsNull({
             alternativeValue,
             value: this.value,
             ifParsingFailThen: 'lazy-get',
         });
 
-    elseThrow = (message: string): N =>
+    elseThrow = <E extends Error>(message: Throw<E>['message']): N =>
         parseAsNull({
             message,
             value: this.value,

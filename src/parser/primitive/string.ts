@@ -14,11 +14,13 @@ type StringOptions = Readonly<{
     string: unknown;
     numberOfCharactersInRangeOf?: RangeOf;
 }>;
-function parseAsString(options: Throw & StringOptions): S;
+function parseAsString<E extends Error>(options: Throw<E> & StringOptions): S;
 function parseAsString<T>(
     options: (Get<T> | LazyGet<T>) & StringOptions
 ): T | S;
-function parseAsString<T>(options: Action<T> & StringOptions): T | S {
+function parseAsString<T, E extends Error>(
+    options: Action<T, E> & StringOptions
+): T | S {
     if (typeof options.string !== 'string') {
         return determineAction(options);
     }
@@ -50,7 +52,7 @@ class StringParser extends Parser<S> {
         return this;
     };
 
-    elseThrow = (message: string): S =>
+    elseThrow = <E extends Error>(message: Throw<E>['message']): S =>
         parseAsString({
             message,
             string: this.value,
@@ -58,7 +60,7 @@ class StringParser extends Parser<S> {
             numberOfCharactersInRangeOf: this.range,
         });
 
-    elseGet = <A>(alternativeValue: A): S | A =>
+    elseGet = <A>(alternativeValue: Get<A>['alternativeValue']): S | A =>
         parseAsString({
             alternativeValue,
             string: this.value,
@@ -66,7 +68,9 @@ class StringParser extends Parser<S> {
             numberOfCharactersInRangeOf: this.range,
         });
 
-    elseLazyGet = <A>(alternativeValue: () => A): S | A =>
+    elseLazyGet = <A>(
+        alternativeValue: LazyGet<A>['alternativeValue']
+    ): S | A =>
         parseAsString({
             alternativeValue,
             string: this.value,

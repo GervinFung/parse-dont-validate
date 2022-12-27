@@ -13,11 +13,15 @@ type CustomPredicate = Readonly<{
     predicate: (a: any) => boolean;
 }>;
 
-function parseAsCustom<C>(options: Throw & CustomPredicate): C;
+function parseAsCustom<C, E extends Error>(
+    options: Throw<E> & CustomPredicate
+): C;
 function parseAsCustom<C, T>(
     options: (Get<T> | LazyGet<T>) & CustomPredicate
 ): T | C;
-function parseAsCustom<C, T>(options: Action<T> & CustomPredicate): T | C {
+function parseAsCustom<C, T, E extends Error>(
+    options: Action<T, E> & CustomPredicate
+): T | C {
     return options.predicate(options.value)
         ? options.value
         : determineAction(options);
