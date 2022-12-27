@@ -1,6 +1,10 @@
+import { Throw, Get, LazyGet } from '../function/action';
+
 export default abstract class Parser<T> {
     protected constructor(protected readonly value: any) {}
-    abstract elseGet<A>(a: A): A | T;
-    abstract elseLazyGet<A>(a: () => A): A | T;
-    abstract elseThrow(message: string): T;
+    abstract elseThrow<E extends Error>(message: Throw<E>['message']): T;
+    abstract elseGet<A>(alternativeValue: Get<A>['alternativeValue']): A | T;
+    abstract elseLazyGet<A>(
+        alternativeValue: LazyGet<A>['alternativeValue']
+    ): A | T;
 }

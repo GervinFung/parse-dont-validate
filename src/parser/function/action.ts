@@ -17,18 +17,18 @@ type LazyGet<T> = Readonly<{
 
 type Action<T, E extends Error> = Throw<E> | Get<T> | LazyGet<T>;
 
-const determineAction = <T, E extends Error>(b: Action<T, E>) => {
-    switch (b.ifParsingFailThen) {
+const determineAction = <T, E extends Error>(action: Action<T, E>) => {
+    switch (action.ifParsingFailThen) {
         case 'get': {
-            return b.alternativeValue;
+            return action.alternativeValue;
         }
         case 'lazy-get': {
-            return b.alternativeValue();
+            return action.alternativeValue();
         }
         case 'throw': {
-            throw b.message instanceof Error
-                ? b.message
-                : ParserError.fromMessage(b.message);
+            throw action.message instanceof Error
+                ? action.message
+                : ParserError.fromMessage(action.message);
         }
     }
 };

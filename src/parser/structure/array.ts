@@ -9,7 +9,7 @@ import {
 
 type ArrayOptions<R> = Readonly<{
     array: unknown;
-    parseElement: (a: any, index?: number, array?: Array<any>) => R;
+    parseElement: (element: any, index?: number, array?: Array<any>) => R;
 }>;
 
 function parseAsMutableArray<R, E extends Error>(

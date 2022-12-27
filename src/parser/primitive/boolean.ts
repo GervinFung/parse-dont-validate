@@ -55,9 +55,3 @@ class BooleanParser extends Parser<B> {
 }
 
 export { BooleanParser, parseAsBoolean };
-
-parseAsBoolean({
-    alternativeValue: () => '',
-    boolean: '',
-    ifParsingFailThen: 'lazy-get',
-});

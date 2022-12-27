@@ -10,7 +10,7 @@ import {
 
 type CustomPredicate = Readonly<{
     value: any;
-    predicate: (a: any) => boolean;
+    predicate: (value: any) => boolean;
 }>;
 
 function parseAsCustom<C, E extends Error>(
@@ -35,7 +35,7 @@ class CustomParser<C = any> extends Parser<C> {
         super(value);
     }
 
-    elseGet = <A>(alternativeValue: A): A | C =>
+    elseGet = <A>(alternativeValue: Get<A>['alternativeValue']): A | C =>
         parseAsCustom({
             alternativeValue,
             value: this.value,
@@ -43,7 +43,9 @@ class CustomParser<C = any> extends Parser<C> {
             predicate: this.predicate,
         });
 
-    elseLazyGet = <A>(alternativeValue: () => A): A | C =>
+    elseLazyGet = <A>(
+        alternativeValue: LazyGet<A>['alternativeValue']
+    ): A | C =>
         parseAsCustom({
             alternativeValue,
             value: this.value,
@@ -51,7 +53,7 @@ class CustomParser<C = any> extends Parser<C> {
             predicate: this.predicate,
         });
 
-    elseThrow = (message: string): C =>
+    elseThrow = <E extends Error>(message: Throw<E>['message']): C =>
         parseAsCustom({
             message,
             value: this.value,
