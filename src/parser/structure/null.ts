@@ -13,7 +13,7 @@ type NullOptions = Readonly<{
     value: unknown;
 }>;
 
-function parseAsNull<T, E extends Error>(options: Throw<E> & NullOptions): null;
+function parseAsNull<E extends Error>(options: Throw<E> & NullOptions): null;
 function parseAsNull<T>(options: Get<T> & NullOptions): T | null;
 function parseAsNull<T>(options: LazyGet<T> & NullOptions): T | null;
 function parseAsNull<T, E extends Error>(
