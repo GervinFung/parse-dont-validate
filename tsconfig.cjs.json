@@ -3,6 +3,7 @@
     "compilerOptions": {
         "module": "CommonJS",
         "outDir": "build/cjs",
-        "target": "ES3"
+        "target": "ES5",
+        "verbatimModuleSyntax": false
     }
 }

@@ -1,10 +1,10 @@
 import Parser from '../class/abstract';
 import {
-    Action,
+    type Action,
     determineAction,
-    Get,
-    LazyGet,
-    Throw,
+    type Get,
+    type LazyGet,
+    type Throw,
 } from '../function/action';
 
 type ArrayOptions<R> = Readonly<{

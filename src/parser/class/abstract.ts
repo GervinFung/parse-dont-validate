@@ -1,4 +1,4 @@
-import { Throw, Get, LazyGet } from '../function/action';
+import type { Throw, Get, LazyGet } from '../function/action';
 
 export default abstract class Parser<T> {
     protected constructor(protected readonly value: any) {}

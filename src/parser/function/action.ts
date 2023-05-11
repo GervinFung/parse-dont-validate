@@ -34,4 +34,4 @@ const determineAction = <T, E extends Error>(action: Action<T, E>) => {
 };
 
 export { determineAction };
-export { Throw, Get, Action, LazyGet };
+export type { Throw, Get, Action, LazyGet };
