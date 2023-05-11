@@ -9,7 +9,11 @@ import {
 
 type ArrayOptions<R> = Readonly<{
     array: unknown;
-    parseElement: (element: unknown, index?: number, array?: Array<unknown>) => R;
+    parseElement: (
+        element: unknown,
+        index?: number,
+        array?: Array<unknown>
+    ) => R;
 }>;
 
 function parseAsMutableArray<R, E extends Error>(
@@ -43,7 +47,10 @@ function parseAsReadonlyArray<R, T, E extends Error>(
 type Parse<Element> = ArrayOptions<Element>['parseElement'];
 
 abstract class ArrayParser<Element> extends Parser<ReadonlyArray<Element>> {
-    constructor(value: unknown, protected readonly parseElement: Parse<Element>) {
+    constructor(
+        value: unknown,
+        protected readonly parseElement: Parse<Element>
+    ) {
         super(value);
     }
 }
