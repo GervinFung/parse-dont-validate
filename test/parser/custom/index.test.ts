@@ -55,7 +55,7 @@ describe('Custom parser', () => {
         (val) => {
             const value = turnToJsonData(val);
             const message = `${value} is a boolean`;
-            const predicate = (value: any) => Array.isArray(value);
+            const predicate = (value: unknown) => Array.isArray(value);
             const parser = parse(value).asCustom(predicate);
 
             expect(() => parser.elseThrow(message)).toThrowError(message);

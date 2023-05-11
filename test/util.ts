@@ -1,3 +1,3 @@
-const turnToJsonData = (d: any) => JSON.parse(JSON.stringify(d));
+const turnToJsonData = (d: unknown) => JSON.parse(JSON.stringify(d));
 
 export default turnToJsonData;

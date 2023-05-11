@@ -25,6 +25,7 @@ describe('Object parser', () => {
         'should be able to parse object "%p" as it is really an object',
         (value) => {
             const object = turnToJsonData(value);
+            /* eslint-disable @typescript-eslint/no-explicit-any */
             const parseObject = (object: any) => ({
                 x: parse(object.x).asNumber().elseThrow('x is not a number'),
                 name: parseAsString({

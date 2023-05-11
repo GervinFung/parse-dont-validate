@@ -9,8 +9,8 @@ import {
 } from '../function/action';
 
 type CustomPredicate = Readonly<{
-    value: any;
-    predicate: (value: any) => boolean;
+    value: unknown;
+    predicate: (value: unknown) => boolean;
 }>;
 
 function parseAsCustom<C, E extends Error>(
@@ -23,13 +23,14 @@ function parseAsCustom<C, T, E extends Error>(
     options: Action<T, E> & CustomPredicate
 ): T | C {
     return options.predicate(options.value)
-        ? options.value
+        ? /* eslint-disable @typescript-eslint/no-explicit-any */
+          (options.value as any)
         : determineAction(options);
 }
 
-class CustomParser<C = any> extends Parser<C> {
+class CustomParser<C = unknown> extends Parser<C> {
     constructor(
-        value: any,
+        value: unknown,
         private readonly predicate: CustomPredicate['predicate']
     ) {
         super(value);

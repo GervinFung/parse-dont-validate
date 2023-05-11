@@ -43,7 +43,7 @@ class StringParser extends Parser<S> {
               max: number;
           }>;
 
-    constructor(value: any) {
+    constructor(value: unknown) {
         super(value);
     }
 

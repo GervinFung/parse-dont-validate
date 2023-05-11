@@ -13,7 +13,7 @@ describe('Array parser', () => {
                 )
             );
 
-            const parseElement = (element: any) =>
+            const parseElement = (element: unknown) =>
                 parse(element)
                     .asNumber()
                     .elseLazyGet(() =>

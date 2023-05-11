@@ -23,7 +23,7 @@ function parseAsNull<T, E extends Error>(
 }
 
 class NullParser extends Parser<N> {
-    constructor(value: any) {
+    constructor(value: unknown) {
         super(value);
     }
 
