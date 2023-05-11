@@ -10,6 +10,8 @@
         "noFallthroughCasesInSwitch": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
+        "module": "ESNEXT",
+        "verbatimModuleSyntax": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "noUncheckedIndexedAccess": true,

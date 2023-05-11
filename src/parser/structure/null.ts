@@ -1,10 +1,10 @@
 import Parser from '../class/abstract';
 import {
-    Action,
+    type Action,
     determineAction,
-    Get,
-    LazyGet,
-    Throw,
+    type Get,
+    type LazyGet,
+    type Throw,
 } from '../function/action';
 
 type N = null;
@@ -23,7 +23,7 @@ function parseAsNull<T, E extends Error>(
 }
 
 class NullParser extends Parser<N> {
-    constructor(value: any) {
+    constructor(value: unknown) {
         super(value);
     }
 

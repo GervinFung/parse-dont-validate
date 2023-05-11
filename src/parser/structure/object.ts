@@ -1,15 +1,15 @@
 import Parser from '../class/abstract';
 import {
-    Action,
+    type Action,
     determineAction,
-    Get,
-    LazyGet,
-    Throw,
+    type Get,
+    type LazyGet,
+    type Throw,
 } from '../function/action';
 
 type ObjectOptions<R extends Object> = Readonly<{
     object: unknown;
-    parse: (a: any) => R;
+    parse: (a: unknown) => R;
 }>;
 
 const isObject = (o: unknown) => o !== null && typeof o === 'object';
@@ -53,13 +53,13 @@ function parseAsReadonlyObject<R extends Object, T, E extends Error>(
 type Parse<O extends Object> = ObjectOptions<O>['parse'];
 
 abstract class ObjectParser<O extends Object> extends Parser<O> {
-    constructor(value: any, protected readonly parse: Parse<O>) {
+    constructor(value: unknown, protected readonly parse: Parse<O>) {
         super(value);
     }
 }
 
 class MutableObjectParser<O extends Object> extends ObjectParser<O> {
-    constructor(object: any, parse: (element: any) => O) {
+    constructor(object: unknown, parse: (element: unknown) => O) {
         super(object, parse);
     }
 
@@ -91,7 +91,7 @@ class MutableObjectParser<O extends Object> extends ObjectParser<O> {
 }
 
 class ReadonlyObjectParser<O extends Object> extends ObjectParser<O> {
-    constructor(object: any, parse: (element: any) => O) {
+    constructor(object: unknown, parse: (element: unknown) => O) {
         super(object, parse);
     }
 

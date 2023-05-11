@@ -1,12 +1,12 @@
 import Parser from '../class/abstract';
 import {
-    Action,
+    type Action,
     determineAction,
-    Get,
-    LazyGet,
-    Throw,
+    type Get,
+    type LazyGet,
+    type Throw,
 } from '../function/action';
-import { inRangeOf, isInRangeOf, RangeOf } from '../helper';
+import { inRangeOf, isInRangeOf, type RangeOf } from '../helper';
 
 type S = string;
 
@@ -43,7 +43,7 @@ class StringParser extends Parser<S> {
               max: number;
           }>;
 
-    constructor(value: any) {
+    constructor(value: unknown) {
         super(value);
     }
 

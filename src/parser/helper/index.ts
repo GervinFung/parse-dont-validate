@@ -24,4 +24,4 @@ const isInRangeOf = ({
         value: number;
     }>) => value >= min && value <= max;
 
-export { RangeOf, inRangeOf, isInRangeOf };
+export { type RangeOf, inRangeOf, isInRangeOf };
