@@ -17,8 +17,8 @@ devDependencies:
     specifier: ^8.40.0
     version: 8.40.0
   node-package-helper:
-    specifier: github:Packer-Man/node-package-helper
-    version: github.com/Packer-Man/node-package-helper/63766249421873f715bb8719bdf5b884f7c058b2
+    specifier: github:GervinFung/node-package-helper
+    version: github.com/GervinFung/node-package-helper/63766249421873f715bb8719bdf5b884f7c058b2
   prettier:
     specifier: ^2.8.8
     version: 2.8.8
@@ -2693,8 +2693,8 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  github.com/Packer-Man/node-package-helper/63766249421873f715bb8719bdf5b884f7c058b2:
-    resolution: {commit: 63766249421873f715bb8719bdf5b884f7c058b2, repo: git+ssh://git@github.com/Packer-Man/node-package-helper.git, type: git}
+  github.com/GervinFung/node-package-helper/63766249421873f715bb8719bdf5b884f7c058b2:
+    resolution: {tarball: https://codeload.github.com/GervinFung/node-package-helper/tar.gz/63766249421873f715bb8719bdf5b884f7c058b2}
     name: node-package-helper
     version: 0.1.0
     hasBin: true
