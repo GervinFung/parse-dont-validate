@@ -17,7 +17,6 @@
         }
     },
     "scripts": {
-        "installation": "pnpm i --frozen-lockfile",
         "lint": "eslint src/ test/ -f='stylish' --color",
         "format": "prettier --ignore-path .gitignore --write src/ test/",
         "format-check": "prettier --ignore-path .gitignore --check src/ test/",
