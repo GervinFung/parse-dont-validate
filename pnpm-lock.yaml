@@ -18,7 +18,7 @@ devDependencies:
     version: 8.40.0
   node-package-helper:
     specifier: github:GervinFung/node-package-helper
-    version: github.com/GervinFung/node-package-helper/63766249421873f715bb8719bdf5b884f7c058b2
+    version: github.com/GervinFung/node-package-helper/5e826d2dfc6d90898755a943ae605662d12eefd0
   prettier:
     specifier: ^2.8.8
     version: 2.8.8
@@ -473,27 +473,6 @@ packages:
   /@typescript-eslint/types@5.59.5:
     resolution: {integrity: sha512-xkfRPHbqSH4Ggx4eHRIO/eGL8XL4Ysb4woL8c87YuAo8Md7AUjyWKa9YMwTL519SyDPrfEgKdewjkxNCVeJW7w==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    dev: true
-
-  /@typescript-eslint/typescript-estree@5.59.5(typescript@4.9.5):
-    resolution: {integrity: sha512-+XXdLN2CZLZcD/mO7mQtJMvCkzRfmODbeSKuMY/yXbGkzvA9rJyDY5qDYNoiz2kP/dmyAxXquL2BvLQLJFPQIg==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@typescript-eslint/types': 5.59.5
-      '@typescript-eslint/visitor-keys': 5.59.5
-      debug: 4.3.4
-      globby: 11.1.0
-      is-glob: 4.0.3
-      semver: 7.5.0
-      tsutils: 3.21.0(typescript@4.9.5)
-      typescript: 4.9.5
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /@typescript-eslint/typescript-estree@5.59.5(typescript@5.0.4):
@@ -2355,19 +2334,19 @@ packages:
       is-number: 7.0.0
     dev: true
 
-  /ts-add-js-extension@1.3.3(typescript@4.9.5):
+  /ts-add-js-extension@1.3.3(typescript@5.0.4):
     resolution: {integrity: sha512-W53p0TjyntbAd4KpjpDWHXxk8h2uE7DKCJ1rqhFY5rNzUcPaBwbpswqaJ0EPcL/DbVfxh/2tSmvMdXqcThF/Ow==}
     hasBin: true
     dependencies:
-      '@typescript-eslint/typescript-estree': 5.59.5(typescript@4.9.5)
+      '@typescript-eslint/typescript-estree': 5.59.5(typescript@5.0.4)
       yargs: 17.7.2
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: true
 
-  /ts-add-js-extension@1.3.3(typescript@5.0.4):
-    resolution: {integrity: sha512-W53p0TjyntbAd4KpjpDWHXxk8h2uE7DKCJ1rqhFY5rNzUcPaBwbpswqaJ0EPcL/DbVfxh/2tSmvMdXqcThF/Ow==}
+  /ts-add-js-extension@1.3.4(typescript@5.0.4):
+    resolution: {integrity: sha512-PyA0n4evoGndM5BhrP49WRkiBPsOvLEfRt7VBfn/8Bs+UQuCugyFgtjYKn097UxkwRX6hlOmVqA33jDwYscjTg==}
     hasBin: true
     dependencies:
       '@typescript-eslint/typescript-estree': 5.59.5(typescript@5.0.4)
@@ -2388,16 +2367,6 @@ packages:
 
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-    dev: true
-
-  /tsutils@3.21.0(typescript@4.9.5):
-    resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
-    engines: {node: '>= 6'}
-    peerDependencies:
-      typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
-    dependencies:
-      tslib: 1.14.1
-      typescript: 4.9.5
     dev: true
 
   /tsutils@3.21.0(typescript@5.0.4):
@@ -2433,12 +2402,6 @@ packages:
       call-bind: 1.0.2
       for-each: 0.3.3
       is-typed-array: 1.1.10
-    dev: true
-
-  /typescript@4.9.5:
-    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
     dev: true
 
   /typescript@5.0.4:
@@ -2693,15 +2656,15 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  github.com/GervinFung/node-package-helper/63766249421873f715bb8719bdf5b884f7c058b2:
-    resolution: {tarball: https://codeload.github.com/GervinFung/node-package-helper/tar.gz/63766249421873f715bb8719bdf5b884f7c058b2}
+  github.com/GervinFung/node-package-helper/5e826d2dfc6d90898755a943ae605662d12eefd0:
+    resolution: {tarball: https://codeload.github.com/GervinFung/node-package-helper/tar.gz/5e826d2dfc6d90898755a943ae605662d12eefd0}
     name: node-package-helper
     version: 0.1.0
     hasBin: true
     requiresBuild: true
     dependencies:
-      ts-add-js-extension: 1.3.3(typescript@4.9.5)
-      typescript: 4.9.5
+      ts-add-js-extension: 1.3.4(typescript@5.0.4)
+      typescript: 5.0.4
     transitivePeerDependencies:
       - supports-color
     dev: true
