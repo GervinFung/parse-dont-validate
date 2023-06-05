@@ -1,3 +1,5 @@
+# This package is obsolete, you should use [zod](https://github.com/vriad/zod), or other alternatives at [typescript-runtime-type-benchmarks](https://github.com/moltar/typescript-runtime-type-benchmarks)
+
 # **Parse, don't validate**
 
 ```
