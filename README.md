@@ -1,4 +1,4 @@
-# This package is obsolete, you should use [zod](https://github.com/vriad/zod), or other alternatives at [typescript-runtime-type-benchmarks](https://github.com/moltar/typescript-runtime-type-benchmarks)
+# This package is obsolete, you should use [zod](https://github.com/vriad/zod), or other alternatives at [typescript-runtime-type-benchmarks](https://github.com/moltar/typescript-runtime-type-benchmarks), because other tools have better API usage and require less code to make it work
 
 # **Parse, don't validate**
 
